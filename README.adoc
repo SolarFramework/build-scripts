@@ -1,0 +1,11 @@
+= Build tools
+
+== solarshell_VS2015.bat and solarshell_VS2017.bat
+
+Windows users: use these scripts to launch a shell console where you will be able
+to compile source code, using the commands described below.
+
+== fromscratch.sh
+
+Usage: build-scripts/fromscratch.sh
+This script builds and install SolAR framework and modules from scratch.
