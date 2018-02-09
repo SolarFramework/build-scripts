@@ -68,7 +68,7 @@ if [ "$OSTYPE" == "msys" ]; then
   QTJOMPATH=${QTREG3//\\/\/} # replace \ with /
   QTJOMPATH=${QTJOMPATH:0:-13}
   QTROOT=${QTJOMPATH:0: -21}
-  QMAKE_EXE=`find "$QTROOT" -wholename */bin/qmake.exe | sort -r -z | head -n 1`
+  QMAKE_EXE=`find "$QTROOT" -wholename *$VSVERSION*/bin/qmake.exe | sort -r -z | head -n 1`
   QMAKE_EXE=${QMAKE_EXE//\\/\/} # replace \ with /
   QMAKE_EXE=${QMAKE_EXE/C:/\/C} # replace C:\ with /C
 
