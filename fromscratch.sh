@@ -10,7 +10,6 @@ echo
 rm -rf $BCOMDEVROOT/builddefs
 rm -rf $BCOMDEVROOT/builddefs/qmake
 git clone https://github.com/b-com-software-basis/builddefs-qmake.git $BCOMDEVROOT/builddefs/qmake
-cp -f build-scripts/packageappbundle.pri $BCOMDEVROOT/builddefs/qmake/win32/packageappbundle.pri # temp patch
 mkdir -p tools
 mkdir -p sources
 cd tools
