@@ -52,7 +52,7 @@ function makeRelease()
 if [ "$#" -ne 2 ]; then
   echo "Usage: build.sh <mode> <what to build>"
   echo "mode: debug or release"
-  echo what to build : "framework", "moduleopencv", "moduleopencvtests", "moduletools", "xpcf", "unittests", "buildall"
+  echo what to build : "framework", "moduleopencv", "modulenonfreeopencv", "moduleopencvtests", "moduletools", "xpcf", "unittests", "buildall"
   exit
 fi
 
@@ -151,6 +151,12 @@ echo "##### BUILDING SOLAR MODULE OPENCV"
 $makeAndInstall "SolARModuleOpenCV" "Modules/SolARModuleOpenCV/SolARModuleOpenCV.pro"
 echo -e "${GREEN} SolARModuleOpenCV $1 is successfully built${NC}"
 ;;
+"modulenonfreeopencv")
+echo
+echo "##### BUILDING SOLAR MODULE OPENCV"
+$makeAndInstall "SolARModuleNonFreeOpenCV" "Modules/SolARModuleNonFreeOpenCV/SolARModuleNonFreeOpenCV.pro"
+echo -e "${GREEN} SolARModuleNonFreeOpenCV $1 is successfully built${NC}"
+;;
 "moduleopencvtests")
 echo
 echo "##### BUILDING SOLAR MODULE OPENCV TESTS"
@@ -223,6 +229,7 @@ echo -e "${GREEN} Natural Image Marker Simple sample $1 is successfully built${N
 $0 $1 xpcf
 $0 $1 framework
 $0 $1 moduleopencv
+$0 $1 modulenonfreeopencv
 $0 $1 moduleopencvtests
 $0 $1 moduletools
 $0 $1 fiducialmarkersample
