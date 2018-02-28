@@ -52,7 +52,7 @@ function makeRelease()
 if [ "$#" -ne 2 ]; then
   echo "Usage: build.sh <mode> <what to build>"
   echo "mode: debug or release"
-  echo what to build : "framework", "moduleopencv", "modulenonfreeopencv", "moduleopencvtests", "moduletools", "xpcf", "unittests", "buildall"
+  echo what to build : "framework", "moduleopencv", "modulenonfreeopencv", "moduleopencvtests", "modulenonfreeopencvtests", "moduletools", "xpcf", "unittests", "buildall"
   exit
 fi
 
@@ -153,7 +153,7 @@ echo -e "${GREEN} SolARModuleOpenCV $1 is successfully built${NC}"
 ;;
 "modulenonfreeopencv")
 echo
-echo "##### BUILDING SOLAR MODULE OPENCV"
+echo "##### BUILDING SOLAR MODULE NON FREE OPENCV"
 $makeAndInstall "SolARModuleNonFreeOpenCV" "Modules/SolARModuleNonFreeOpenCV/SolARModuleNonFreeOpenCV.pro"
 echo -e "${GREEN} SolARModuleNonFreeOpenCV $1 is successfully built${NC}"
 ;;
@@ -162,27 +162,25 @@ echo
 echo "##### BUILDING SOLAR MODULE OPENCV TESTS"
 $makeAndInstall "SolARCameraCalibration" "Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static/SolARCameraCalibration.pro"
 echo -e "${GREEN} SolARCameraCalibration static $1 is successfully built${NC}"
-$makeAndInstall "SolARDescriptorExtractorDynamic" "Modules/SolARModuleOpenCV/tests/SolARDescriptorExtractor/dynamic/SolARDescriptorExtractorOpenCVDynTest.pro"
-echo -e "${GREEN} SolARDescriptorExtractor dynamic $1 is successfully built${NC}"
-$makeAndInstall "SolARDescriptorExtractorStatic" "Modules/SolARModuleOpenCV/tests/SolARDescriptorExtractor/static/SolARDescriptorExtractorOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARDescriptorExtractor static $1 is successfully built${NC}"
-$makeAndInstall "SolARDescriptorMatcherDynamic" "Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/dynamic/SolARDescriptorMatcherOpenCVDynTest.pro"
-echo -e "${GREEN} SolARDescriptorMatcher dynamic $1 is successfully built${NC}"
-$makeAndInstall "SolARDescriptorMatcherStatic" "Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/static/SolARDescriptorMatcherOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARDescriptorMatcher static $1 is successfully built${NC}"
-$makeAndInstall "SolARFiducialMarkerStatic" "Modules/SolARModuleOpenCV/tests/SolARFiducialMarker/static/SolARMarker2DFiducialOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARFiducialMarkerStatic static $1 is successfully built${NC}"
 $makeAndInstall "SolARImageConvertorDynamic" "Modules/SolARModuleOpenCV/tests/SolARImageConvertor/dynamic/SolARImageConvertorOpencvTest.pro"
 echo -e "${GREEN} SolARImageConvertor dynamic $1 is successfully built${NC}"
 $makeAndInstall "SolARImageLoaderDynamic" "Modules/SolARModuleOpenCV/tests/SolARImageLoader/dynamic/SolARImageOpenCVDynTest.pro"
 echo -e "${GREEN} SolARImageLoader dynamic $1 is successfully built${NC}"
 $makeAndInstall "SolARImageLoaderStatic" "Modules/SolARModuleOpenCV/tests/SolARImageLoader/static/SolARImageOpenCVStaticTest.pro"
 echo -e "${GREEN} SolARImageLoader static $1 is successfully built${NC}"
-$makeAndInstall "SolARNaturalImageMarkerDynamic" "Modules/SolARModuleOpenCV/tests/SolARNaturalImageMarker/dynamic/SolARNaturalImageMarkerOpenCVDynTest.pro"
-echo -e "${GREEN} SolARNaturalImageMarker dynamic $1 is successfully built${NC}"
-$makeAndInstall "SolARNaturalImageMarkerStatic" "Modules/SolARModuleOpenCV/tests/SolARNaturalImageMarker/static/SolARNaturalImageMarkerOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARNaturalImageMarker static $1 is successfully built${NC}"
-$makeAndInstall "SolARHomographyEstimationStatic" "Modules/SolARModuleOpenCV/tests/SolARHomographyEstimation/static/SolARHomographyEstimationStaticTest.pro"
+;;
+"modulenonfreeopencvtests")
+echo
+echo "##### BUILDING SOLAR MODULE NON FREE OPENCV TESTS"
+$makeAndInstall "SolARDescriptorExtractorDynamic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic/SolARDescriptorExtractorOpenCVDynTest.pro"
+echo -e "${GREEN} SolARDescriptorExtractor dynamic $1 is successfully built${NC}"
+$makeAndInstall "SolARDescriptorExtractorStatic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/static/SolARDescriptorExtractorOpenCVStaticTest.pro"
+echo -e "${GREEN} SolARDescriptorExtractor static $1 is successfully built${NC}"
+$makeAndInstall "SolARDescriptorMatcherDynamic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/dynamic/SolARDescriptorMatcherOpenCVDynTest.pro"
+echo -e "${GREEN} SolARDescriptorMatcher dynamic $1 is successfully built${NC}"
+$makeAndInstall "SolARDescriptorMatcherStatic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/static/SolARDescriptorMatcherOpenCVStaticTest.pro"
+echo -e "${GREEN} SolARDescriptorMatcher static $1 is successfully built${NC}"
+$makeAndInstall "SolARHomographyEstimationStatic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARHomographyEstimation/static/SolARHomographyEstimationStaticTest.pro"
 echo -e "${GREEN} SolARHomographyEstimation static $1 is successfully built${NC}"
 ;;
 "moduletools")
@@ -231,6 +229,7 @@ $0 $1 framework
 $0 $1 moduleopencv
 $0 $1 modulenonfreeopencv
 $0 $1 moduleopencvtests
+$0 $1 modulenonfreeopencvtests
 $0 $1 moduletools
 $0 $1 fiducialmarkersample
 $0 $1 naturalimagemarkersample
