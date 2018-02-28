@@ -62,7 +62,7 @@ echo
 ../build-scripts/solarbuild.sh release fiducialmarkersample
 ../build-scripts/solarbuild.sh debug fiducialmarkersample
 
-echo "BUILD SOLAR NATURAL IMAGE MARKER SAMPLE"
-echo
-../build-scripts/solarbuild.sh release naturalimagemarkersample
-../build-scripts/solarbuild.sh debug naturalimagemarkersample
+#echo "BUILD SOLAR NATURAL IMAGE MARKER SAMPLE"
+#echo
+#../build-scripts/solarbuild.sh release naturalimagemarkersample
+#../build-scripts/solarbuild.sh debug naturalimagemarkersample
