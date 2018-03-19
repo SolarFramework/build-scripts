@@ -3,34 +3,23 @@ mkdir build
 rem build release mode
 cd build
 mkdir release
-cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ../build-scripts/
+cd release
+cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ../../build-scripts/
+call :buildTargets
 
-cd SolARFramework
-nmake
-nmake install
-cd ..
 
-cd Modules/SolARModuleOpenCV
-nmake
-nmake install
-cd ..
-
-cd Modules/SolARModuleNonFreeOpenCV
-nmake
-nmake install
-cd ..
-
-cd Modules/SolARModuleTools
-nmake
-nmake install
-cd ..
-
+rem back to build/ directory
+cd ../..
 
 rem build debug mode
-cd build
 mkdir debug
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../../build-scripts/
+cd debug
+cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug ../../build-scripts/
+call :buildTargets
 
+
+rem function to build all targets
+:buildTargets
 cd SolARFramework
 nmake
 nmake install
@@ -41,12 +30,15 @@ nmake
 nmake install
 cd ..
 
-cd Modules/SolARModuleNonFreeOpenCV
+cd SolARModuleNonFreeOpenCV
 nmake
 nmake install
 cd ..
 
-cd Modules/SolARModuleTools
+cd SolARModuleTools
 nmake
 nmake install
 cd ..
+
+goto :eof
+

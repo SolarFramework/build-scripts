@@ -5,4 +5,6 @@ add_subdirectory("../sources/Modules/SolARModuleOpenCV" "Modules/SolARModuleOpen
 add_subdirectory("../sources/Modules/SolARModuleNonFreeOpenCV" "Modules/SolARModuleNonFreeOpenCV")
 add_subdirectory("../sources/Modules/SolARModuleTools" "Modules/SolARModuleTools")
 
+add_subdirectory("../sources/Samples/NaturalImageMarker/Static" "Samples/NaturalImageMarker/Static")
+add_subdirectory("../sources/Samples/FiducialMarker/Static" "Samples/FiducialMarker/Static")
 
