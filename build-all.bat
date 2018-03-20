@@ -1,22 +1,24 @@
-mkdir build
+if not exist "build" mkdir build
 
 rem build release mode
 cd build
-mkdir release
+if not exist "release" mkdir release
 cd release
 cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ../../build-scripts/
 call :buildTargets
 
 
 rem back to build/ directory
-cd ../..
+cd ..
 
 rem build debug mode
-mkdir debug
+if not exist "debug" mkdir debug
 cd debug
 cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug ../../build-scripts/
 call :buildTargets
 
+cd ../..
+EXIT /B 0
 
 rem function to build all targets
 :buildTargets
@@ -25,7 +27,9 @@ nmake
 nmake install
 cd ..
 
-cd Modules/SolARModuleOpenCV
+cd Modules
+
+cd SolARModuleOpenCV
 nmake
 nmake install
 cd ..
@@ -38,7 +42,21 @@ cd ..
 cd SolARModuleTools
 nmake
 nmake install
+
+cd ../..
+
+cd Samples
+
+cd NaturalImageMarker/Static
+nmake
+nmake install
+cd ../..
+
+cd FiducialMarker/Static
+nmake
+nmake install
+cd ../..
+
 cd ..
 
-goto :eof
-
+EXIT /B 0
