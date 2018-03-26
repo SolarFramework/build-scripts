@@ -3,42 +3,42 @@
 # function to build all targets
 function buildTargets() 
 {
-	cd SolARFramework
-	nmake
-	nmake install
-	cd ..
+BUILDCONFIG=$1
+cd $BUILDCONFIG
 
-	cd Modules
+mkdir -p $BUILDCONFIG
+cd $BUILDCONFIG
 
-	cd SolARModuleOpenCV
-	nmake
-	nmake install
-	cd ..
+cmake -H../../sources/SolARFramework -B./SolARFramework -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd SolARFramework
+make install
+cd ..
 
-	cd SolARModuleNonFreeOpenCV
-	nmake
-	nmake install
-	cd ..
+cmake -H../../sources/Modules/SolARModuleOpenCV -B./Modules/SolARModuleOpenCV -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Modules/SolARModuleOpenCV
+make install
+cd ../..
 
-	cd SolARModuleTools
-	nmake
-	nmake install
+cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV -B./Modules/SolARModuleNonFreeOpenCV -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Modules/SolARModuleOpenCV
+make install
+cd ../..
 
-	cd ../..
+cmake -H../../sources/Modules/SolARModuleTools -B./Modules/SolARModuleTools -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Modules/SolARModuleOpenCV
+make install
+cd ../..
 
-	cd Samples
+cmake -H../../sources/Samples/NaturalImageMarker/Static -B./Samples/NaturalImageMarker/Static -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/NaturalImageMarker/Static
+make
+cd ../../..
 
-	cd NaturalImageMarker/Static
-	nmake
-	nmake install
-	cd ../..
-
-	cd FiducialMarker/Static
-	nmake
-	nmake install
-	cd ../..
-
-	cd ..
+cmake -H../../sources/Samples/FiducialMarker/Static -B./Samples/FiducialMarker/Static -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/FiducialMarker/Static
+make
+cd ../../..
+cd ..
 
 }
 
@@ -46,20 +46,5 @@ mkdir -p build
 
 # build release mode
 cd build
-mkdir -p release
-cd release
-cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ../../build-scripts/
-buildTargets
-
-
-# back to build/ directory
-cd ..
-
-# build debug mode
-mkdir -p debug
-cd debug
-cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug ../../build-scripts/
-buildTargets
-
-cd ../..
-
+buildTargets Release
+buildTargets Debug

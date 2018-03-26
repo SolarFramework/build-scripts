@@ -1,62 +1,54 @@
+set CL=/MP
+
 if not exist "build" mkdir build
+cd build
 
 rem build release mode
-cd build
-if not exist "release" mkdir release
-cd release
-cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ../../build-scripts/
+set BUILDCONFIG="Release"
+call :buildTargets
+
+set BUILDCONFIG="Debug"
 call :buildTargets
 
 
-rem back to build/ directory
-cd ..
-
-rem build debug mode
-if not exist "debug" mkdir debug
-cd debug
-cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug ../../build-scripts/
-call :buildTargets
-
-cd ../..
 EXIT /B 0
-
 rem function to build all targets
 :buildTargets
+
+if not exist "%BUILDCONFIG%" mkdir %BUILDCONFIG%
+cd %BUILDCONFIG%
+
+cmake -H../../sources/SolARFramework -B./SolARFramework -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
 cd SolARFramework
-nmake
 nmake install
 cd ..
 
-cd Modules
-
-cd SolARModuleOpenCV
-nmake
-nmake install
-cd ..
-
-cd SolARModuleNonFreeOpenCV
-nmake
-nmake install
-cd ..
-
-cd SolARModuleTools
-nmake
-nmake install
-
-cd ../..
-
-cd Samples
-
-cd NaturalImageMarker/Static
-nmake
+cmake -H../../sources/Modules/SolARModuleOpenCV -B./Modules/SolARModuleOpenCV -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Modules/SolARModuleOpenCV
 nmake install
 cd ../..
 
-cd FiducialMarker/Static
-nmake
+cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV -B./Modules/SolARModuleNonFreeOpenCV -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Modules/SolARModuleOpenCV
 nmake install
 cd ../..
 
-cd ..
+cmake -H../../sources/Modules/SolARModuleTools -B./Modules/SolARModuleTools -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Modules/SolARModuleOpenCV
+nmake install
+cd ../..
 
+cmake -H../../sources/Samples/NaturalImageMarker/Static -B./Samples/NaturalImageMarker/Static -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Samples/NaturalImageMarker/Static
+nmake
+cd ../../..
+
+cmake -H../../sources/Samples/FiducialMarker/Static -B./Samples/FiducialMarker/Static -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Samples/FiducialMarker/Static
+nmake
+cd ../../..
+cd ..
 EXIT /B 0
+
+
+
