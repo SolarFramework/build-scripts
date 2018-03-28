@@ -25,13 +25,13 @@ cmake --build . --config $BUILDCONFIG --target install
 cd ../..
 
 cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV -B./Modules/SolARModuleNonFreeOpenCV -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Modules/SolARModuleOpenCV
+cd Modules/SolARModuleNonFreeOpenCV
 cmake --build . --config $BUILDCONFIG
 cmake --build . --config $BUILDCONFIG --target install	
 cd ../..
 
 cmake -H../../sources/Modules/SolARModuleTools -B./Modules/SolARModuleTools -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Modules/SolARModuleOpenCV
+cd Modules/SolARModuleTools
 cmake --build . --config $BUILDCONFIG
 cmake --build . --config $BUILDCONFIG --target install	
 cd ../..
