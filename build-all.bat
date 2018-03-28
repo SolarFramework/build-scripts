@@ -29,12 +29,12 @@ nmake install
 cd ../..
 
 cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV -B./Modules/SolARModuleNonFreeOpenCV -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
-cd Modules/SolARModuleOpenCV
+cd Modules/SolARModuleNonFreeOpenCV
 nmake install
 cd ../..
 
 cmake -H../../sources/Modules/SolARModuleTools -B./Modules/SolARModuleTools -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
-cd Modules/SolARModuleOpenCV
+cd Modules/SolARModuleTools
 nmake install
 cd ../..
 

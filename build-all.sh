@@ -18,12 +18,12 @@ make install
 cd ../..
 
 cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV -B./Modules/SolARModuleNonFreeOpenCV -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Modules/SolARModuleOpenCV
+cd Modules/SolARModuleNonFreeOpenCV
 make install
 cd ../..
 
 cmake -H../../sources/Modules/SolARModuleTools -B./Modules/SolARModuleTools -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Modules/SolARModuleOpenCV
+cd Modules/SolARModuleTools
 make install
 cd ../..
 
