@@ -168,6 +168,8 @@ $makeAndInstall "SolARImageLoaderDynamic" "Modules/SolARModuleOpenCV/tests/SolAR
 echo -e "${GREEN} SolARImageLoader dynamic $1 is successfully built${NC}"
 $makeAndInstall "SolARImageLoaderStatic" "Modules/SolARModuleOpenCV/tests/SolARImageLoader/static/SolARImageOpenCVStaticTest.pro"
 echo -e "${GREEN} SolARImageLoader static $1 is successfully built${NC}"
+$makeAndInstall "SolARSVDtriangulation static" "Modules/SolARModuleOpenCV/tests/SolARSVDtriangulation/SolARSVDTriangulationOpenCVStaticTest.pro"
+echo -e "${GREEN} SolARSVDtriangulation static $1 is successfully built${NC}"
 ;;
 "modulenonfreeopencvtests")
 echo
@@ -203,7 +205,7 @@ cd $SOLARPATH/../build/release/unittests
     cp $SOLARPATH/Modules/SolARModuleOpenCV/tests/data/* .
     ./SolARModuleOpenCVUnitTests --log_format=JUNIT --log_level=all --report_level=no --log_sink=$SOLARPATH/../tests/SolARModuleOpenCVUnitTests.xml > /dev/null
     ;;
-    "fiducialmarkersample")
+"fiducialmarkersample")
 echo
 echo "##### BUILDING FIDUCIAL MARKER SAMPLE"
 $makeAndInstall "Samples/FiducialMarkerDynamic" "Samples/FiducialMarker/Dynamic/SolARFiducialMarkerSampleDynamic.pro"
@@ -223,6 +225,12 @@ echo -e "${GREEN} Natural Image Marker Static sample $1 is successfully built${N
 $makeAndInstall "Samples/NaturalImageMarkerSimple" "Samples/NaturalImageMarker/Simple/SolARNaturalImageMarkerSimple.pro"
 echo -e "${GREEN} Natural Image Marker Simple sample $1 is successfully built${NC}"
 ;;
+"triangulationsample")
+echo
+echo "##### BUILDING TRIANGULATION SAMPLE"
+$makeAndInstall "Samples/Triangulation" "Samples/Triangulation/SolARTriangulationSample.pro"
+echo -e "${GREEN} Triangulation sample $1 is successfully built${NC}"
+;;
 "buildall")
 $0 $1 xpcf
 $0 $1 framework
@@ -233,6 +241,7 @@ $0 $1 modulenonfreeopencvtests
 $0 $1 moduletools
 $0 $1 fiducialmarkersample
 $0 $1 naturalimagemarkersample
+$0 $1 triangulationsample
 
 find $BUILDPATH/ -name "lib*so*" -exec cp {}  $BUILDPATH/bin/ \;
 find $BUILDPATH/ -name "*.dll" -exec cp {}  $BUILDPATH/bin/ \;
