@@ -52,7 +52,7 @@ function makeRelease()
 if [ "$#" -ne 2 ]; then
   echo "Usage: build.sh <mode> <what to build>"
   echo "mode: debug or release"
-  echo what to build : "framework", "moduleopencv", "modulenonfreeopencv", "moduleopencvtests", "modulenonfreeopencvtests", "moduletools", "xpcf", "unittests", "buildall"
+  echo what to build : "framework", "moduleopencv", "modulenonfreeopencv", "moduleopencvtests", "modulenonfreeopencvtests", "moduletools", "fiducialmarkersample", "naturalimagemarkersample", "triangulationsample", "xpcf", "unittests", "buildall"
   exit
 fi
 
@@ -228,7 +228,7 @@ echo -e "${GREEN} Natural Image Marker Simple sample $1 is successfully built${N
 "triangulationsample")
 echo
 echo "##### BUILDING TRIANGULATION SAMPLE"
-$makeAndInstall "Samples/Triangulation" "Samples/Sample-Triangulation/SolARTriangulationSample.pro"
+$makeAndInstall "Samples/Sample-Triangulation/" "Samples/Sample-Triangulation/SolARTriangulationSample.pro"
 echo -e "${GREEN} Triangulation sample $1 is successfully built${NC}"
 ;;
 "buildall")
