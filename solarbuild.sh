@@ -228,7 +228,7 @@ echo -e "${GREEN} Natural Image Marker Simple sample $1 is successfully built${N
 "triangulationsample")
 echo
 echo "##### BUILDING TRIANGULATION SAMPLE"
-$makeAndInstall "Samples/Triangulation" "Samples/Triangulation/SolARTriangulationSample.pro"
+$makeAndInstall "Samples/Triangulation" "Samples/Sample-Triangulation/SolARTriangulationSample.pro"
 echo -e "${GREEN} Triangulation sample $1 is successfully built${NC}"
 ;;
 "buildall")
