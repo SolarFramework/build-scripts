@@ -81,8 +81,8 @@ def PROJECT_NAME = "argo"
                     export QT_SELECT=qt5
                     export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
-                    export LD_LIBRARY_PATH=./:$BCOMDEVROOT/bcomBuild/SolARFramework/0.3.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/xpcf/1.0.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH
-                    export XPCF_REGISTRY_PATH=$BCOMDEVROOT/bcomBuild/SolARModuleOpenCV/0.3.0/xpcf_jenkins_registry.xml
+                    export LD_LIBRARY_PATH=./:$BCOMDEVROOT/bcomBuild/SolARFramework/0.4.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/xpcf/1.0.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH
+                    export XPCF_REGISTRY_PATH=$BCOMDEVROOT/bcomBuild/SolARModuleOpenCV/0.4.0/xpcf_jenkins_registry.xml
                     cd SolAR
                     ./build-scripts/solarbuild.sh release unittests
                 '''
