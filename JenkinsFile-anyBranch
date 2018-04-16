@@ -1,0 +1,277 @@
+def PROJECT_USER = "svc-prj-argo"
+def PROJECT_NAME = "argo"
+def pipelineDescription="SolARFramework was built on branch ${env.frameworkBranch}" + "\n" +"SolARModuleOpenCV was built on branch ${env.moduleOpencvBranch}" + "\n" + "SolARModuleTools was built on branch ${env.moduleToolsBranch}" + "\n" + "FiducialMarker was built on branch ${env.fiducialBranch}" + "\n" + "NaturalImage was built on branch ${env.naturalBranch}"
+currentBuild.description = pipelineDescription
+def allBranchesAndCommits
+
+pipeline {
+
+    agent {
+        node { label "jenkins-slave-argo"}
+    }
+    stages {
+        stage("get third parties and source code"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+                artifactoryApiKey=credentials('artifactoryApiKey')
+                frameworkBranch="${env.frameworkBranch}"
+                moduleOpencvBranch="${env.moduleOpencvBranch}"
+                moduleNonFreeOpencvBranch="${env.moduleNonFreeOpencvBranch}"
+                moduleToolsBranch="${env.moduleToolsBranch}"
+                naturalBranch="${env.naturalBranch}"
+                fiducialBranch="${env.fiducialBranch}"
+				triangulationBranch="${env.triangulationBranch}"
+                buildNonFree="${env.buildNonFree}"
+				buildTriangulationSample="${env.buildTriangulationSample}"
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    mkdir -p /home/jenkins/BCOMDEVROOT
+                    mkdir -p /home/jenkins/BCOMDEVROOT/linux
+                    mkdir -p tools
+                    mkdir -p SolAR
+                    echo "artifactoryApiKey=$artifactoryApiKey" > ~/.pkgm-bcom
+                    git clone https://github.com/b-com-software-basis/builddefs-qmake.git $BCOMDEVROOT/builddefs/qmake
+                    cd tools
+                    if [ $buildNonFree = 'true' ]; then
+                        curl -L https://raw.githubusercontent.com/SolarFramework/binaries/master/packagedependencies-bcom.txt -o packagedependencies.txt
+                    else
+                        curl -L https://raw.githubusercontent.com/SolarFramework/binaries/master/packagedependencies-bcom.txt -o packagedependencies.txt
+                    fi
+                    curl -L https://github.com/SolarFramework/binaries/releases/download/pkgm-bcom%2F1.0.0%2Fmulti/pkgm-1.0.0-fat.jar -o pkgm-1.0.0-fat.jar
+                    java -jar pkgm-1.0.0-fat.jar install -a x86_64 -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
+                    cd ..
+                    cd SolAR
+					if [ $buildTriangulationSample = 'true' ]; then
+						git clone -b feature/triangulation https://$USERNAMEPWD@github.com/SolarFramework/build-scripts.git
+					else
+						git clone https://$USERNAMEPWD@github.com/SolarFramework/build-scripts.git
+                    fi
+					chmod +x build-scripts/*.sh
+                    git clone -b $frameworkBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARFramework.git
+                    mkdir -p Modules
+                    cd Modules
+                    git clone -b $moduleOpencvBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARModuleOpenCV.git
+                    git clone -b $moduleNonFreeOpencvBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARModuleNonFreeOpenCV.git
+                    git clone -b $moduleToolsBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARModuleTools.git
+                    cd ..
+                    mkdir -p Samples
+                    cd Samples
+                    git clone -b $naturalBranch https://$USERNAMEPWD@github.com/SolarFramework/NaturalImageMarker.git
+                    git clone -b  $fiducialBranch https://$USERNAMEPWD@github.com/SolarFramework/FiducialMarker.git
+					if [ $buildTriangulationSample = 'true' ]; then
+						git clone -b $triangulationBranch https://$USERNAMEPWD@github.com/SolarFramework/Sample-Triangulation.git
+                    fi
+					cd ..
+                '''
+                script {
+                    def frameworkCommit = sh returnStdout: true, script: 'git -C SolAR/SolARFramework rev-parse --short HEAD'
+                    echo "Framework Commit : "
+                    echo frameworkCommit
+                    def moduleOpencvCommit = sh returnStdout: true, script: 'git -C SolAR/Modules/SolARModuleOpenCV rev-parse --short HEAD'
+                    def moduleNonFreeOpencvCommit = sh returnStdout: true, script: 'git -C SolAR/Modules/SolARModuleNonFreeOpenCV rev-parse --short HEAD'
+                    def moduleToolsCommit = sh returnStdout: true, script: 'git -C SolAR/Modules/SolARModuleTools rev-parse --short HEAD'
+                    def naturalCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/NaturalImageMarker rev-parse --short HEAD'
+                    def fiducialCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/FiducialMarker rev-parse --short HEAD'
+					def triangulationCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/Sample-Triangulation rev-parse --short HEAD'
+                    allBranchesAndCommits = "\n" + "Framework:" + "\n" + frameworkBranch + "/" + frameworkCommit + "\n" + "ModuleOpenCV:" + "\n" + moduleOpencvBranch + "/" + moduleOpencvCommit + "\n" + "ModuleNonFreeOpenCV:" + "\n" + moduleNonFreeOpencvBranch + "/" + moduleNonFreeOpencvCommit + "\n" + "ModuleTools:" + "\n" +  moduleToolsBranch + "/" + moduleToolsCommit + "\n" + "NaturalImage:" + "\n" + naturalBranch + "/" +  naturalCommit + "\n" + "FiducialMarker:" + "\n" + fiducialBranch + "/" + fiducialCommit + "Triangulation:" + "\n" + triangulationBranch + "/" + triangulationCommit
+                    currentBuild.description=allBranchesAndCommits
+                }
+            }
+        }
+
+        stage("build SolARFramework"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release framework
+                '''
+            }
+        }
+
+        stage("build SolARModuleOpenCV"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release moduleopencv
+                '''
+            }
+        }
+
+        stage("build SolARNonFreeModuleOpenCV"){
+            when {
+                expression { params.buildNonFree == true }
+            }
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release modulenonfreeopencv
+                '''
+            }
+        }
+
+        stage("build SolARModuleOpenCV Tests"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release moduleopencvtests
+                '''
+            }
+        }
+
+        stage("build SolARModuleNonFreeOpenCV Tests"){
+            when {
+                expression { params.buildNonFree == true }
+            }            
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release modulenonfreeopencvtests
+                '''
+            }
+        }
+        stage("build/run Unit tests"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    export LD_LIBRARY_PATH=./:$BCOMDEVROOT/bcomBuild/SolARFramework/0.4.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/xpcf/1.0.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH
+                    export XPCF_REGISTRY_PATH=$BCOMDEVROOT/bcomBuild/SolARModuleOpenCV/0.4.0/xpcf_jenkins_registry.xml
+                    cd SolAR
+                    # ./build-scripts/solarbuild.sh release unittests
+                '''
+            // junit 'tests/*.xml'
+            }
+        }
+
+
+        stage("build SolARModuleTools"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release moduletools
+                '''
+            }
+        }
+
+        stage("build Fiducial Marker Sample"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release fiducialmarkersample
+                '''
+            }
+        }
+
+        stage("build Natural Image Marker Sample"){           
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release naturalimagemarkersample
+                '''
+            }
+        }
+        
+        stage("build Triangulation Sample"){
+            when {
+                expression { params.buildTriangulationSample == true }
+            } 
+			environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release triangulationsample
+                '''
+            }
+        }
+
+
+    }
+
+    post {
+        always {
+            deleteDir() /* clean up our workspace */
+        }        
+        failure {
+            mail to:"framework.solar@b-com.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Jenkins Pipeline failed." + "\n" + allBranchesAndCommits
+        }
+        unstable {
+            mail to:"framework.solar@b-com.com", subject:"UNSTABLE: ${currentBuild.fullDisplayName}", body: "Jenkins Pipeline is unstable."  + "\n" + allBranchesAndCommits
+        }
+        changed {
+            mail to:"framework.solar@b-com.com", subject:"CHANGED to ${currentBuild.currentResult}: ${currentBuild.fullDisplayName}", body: "Jenkins Pipeline status changed!"  + "\n" + allBranchesAndCommits
+        }
+    }
+
+}
