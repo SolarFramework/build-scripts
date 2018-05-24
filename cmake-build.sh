@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x
 set -e
 
 # function to build all targets
@@ -49,7 +48,6 @@ cd ../../..
 cd ..
 
 }
-
 # select generator
 echo "Select Generator"
 if [ "$OSTYPE" == "msys" ]; then
@@ -65,7 +63,7 @@ if [ "$OSTYPE" == "msys" ]; then
 	        "Ninja" ) generator="Ninja"; break;;
 	    esac
 	done
-elif [ "$OSTYPE" == "linux" ]; then
+elif [[ "$OSTYPE" = *"linux"* ]]; then
 	generator="Unix Makefiles"
 fi
 

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+  echo "Usage:"
+  echo "$0 [path to repo] (interactive mode)"
+  echo "or"
+  echo "$0 [path to repo] [branch to checkout]"
+  exit -1
+fi
+
+repo_fullname=`git rev-parse --show-toplevel`
+repo_name=`basename $repo_fullname`
+echo "REPOSITORY: $repo_name"
+cd $1
+current_branch=`git rev-parse --abbrev-ref HEAD`
+echo "CURRENT BRANCH: $current_branch"
+echo
+
+branches=`git branch -r | grep -v HEAD` 
+branches=${branches//\*/}
+branches=${branches//origin\//}
+
+echo "SELECT BRANCH TO CHECKOUT"
+if [ $# -eq 2 ]; then
+  if [[ $branches = *"$2"* ]]; then
+    git checkout $2
+    exit 0
+  else
+    exit -1
+  fi
+fi
+
+select branch in $branches;
+do
+git checkout $branch
+exit
+done
