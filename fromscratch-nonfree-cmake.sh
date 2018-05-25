@@ -54,4 +54,4 @@ git clone -b develop git@github.com:SolarFramework/NaturalImageMarker.git
 git clone -b develop git@github.com:SolarFramework/FiducialMarker.git
 cd ../..
 
-./build-scripts/build-all.sh
+./build-scripts/cmake-build.sh
