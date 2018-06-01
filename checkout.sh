@@ -8,10 +8,10 @@ if [ $# -lt 1 ]; then
   exit -1
 fi
 
+cd $1
 repo_fullname=`git rev-parse --show-toplevel`
 repo_name=`basename $repo_fullname`
 echo "REPOSITORY: $repo_name"
-cd $1
 current_branch=`git rev-parse --abbrev-ref HEAD`
 echo "CURRENT BRANCH: $current_branch"
 echo
