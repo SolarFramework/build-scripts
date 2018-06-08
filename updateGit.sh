@@ -13,8 +13,8 @@ function updateGit()
 	git pull origin `git rev-parse --symbolic-full-name --abbrev-ref HEAD`
 }
 
-# SolarFramework
-cd sources/SolarFramework
+# SolARFramework
+cd sources/SolARFramework
 updateGit $1
 cd $CURRENTDIR
 
