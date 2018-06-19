@@ -1,5 +1,38 @@
 = build scripts for windows & linux
 
+== INIT
+
+You should first install cmake, and check the addition of cmake to your path.
+https://cmake.org/download/
+
+Please use first fromscratch-cmake.sh to download the entire SolAR framework (nonfree excepted ), and then select the branch you want to work on.
+
+NOTE: please note that the updateGit.sh will select the required branch for every GIT repository where the specified branch exists.
+
+$ ./build-scripts/fromscratch-cmake.sh
+
+$ ./build-scripts/updateGit.sh develop
+
+
+== fromscratch-cmake.sh
+
+In a directory that only contains build-scripts/ folder, you may launch:
+
+[source, shell]
+
+	$ ./build-scripts/fromscratch-cmake.sh
+
+This command will first get all dependencies (third parties libraries) for you. Then it will
+create a source/ directory, and will clone all sources/ into that directory.
+Finally sources will be built and installed.
+
+
+== fromscratch-nonfree-cmake.sh (optionnal)
+
+This command is similar to fromscratch-cmake.sh. The only difference is that it allows the download of non free dependencies
+(e.g non free libs that are part of opencv-contrib libraries). Some non free libraries and non free samples will also be built and installed.
+
+
 == checkout.sh
 
 This script is used to position a switch a specific git repository to a desired branch.
@@ -135,20 +168,3 @@ will be built and installed in these two modes.
 This command will build and install all targets listed in "./build-scripts/cmake-build.sh list" output.
 
 
-== fromscratch-cmake.sh
-
-In a directory that only contains build-scripts/ folder, you may launch:
-
-[source, shell]
-
-	$ ./build-scripts/fromscratch-cmake.sh
-
-This command will first get all dependencies (third parties libraries) for you. Then it will
-create a source/ directory, and will clone all sources/ into that directory.
-Finally sources will be built and installed.
-
-
-== fromscratch-nonfree-cmake.sh
-
-This command is similar to fromscratch-cmake.sh. The only difference is that it allows the download of non free dependencies
-(e.g non free libs that are part of opencv-contrib libraries). Some non free libraries and non free samples will also be built and installed.
