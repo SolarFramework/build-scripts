@@ -52,6 +52,9 @@ mkdir -p Samples
 cd Samples
 git clone -b develop git@github.com:SolarFramework/NaturalImageMarker.git
 git clone -b develop git@github.com:SolarFramework/FiducialMarker.git
-cd ../..
+cd ..
+
+git clone -b develop git@github.com:SolarFramework/SolARTests.git
+cd ..
 
 ./build-scripts/cmake-build.sh all

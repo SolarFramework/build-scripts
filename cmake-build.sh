@@ -107,6 +107,16 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
 		;;
+	"UnitTests")
+		cmake -H../../sources/SolARTests/unittests/ModuleLoading -B./SolARTests/unittests/ModuleLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd SolARTests/unittests/ModuleLoading
+		cmake --build . --config $BUILDCONFIG	
+		cd ../../../
+		##
+		cmake -H../../sources/SolARTests/unittests/ComponentLoading -B./SolARTests/unittests/ComponentLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd SolARTests/unittests/ComponentLoading
+		cmake --build . --config $BUILDCONFIG
+		;;
 	*)
 		echo "unknown target"
 		return -1
@@ -199,7 +209,11 @@ case "$TARGET" in
 		;;
 	"list")
 		echo "Available targets:"
-		echo "SolARFramework, SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, NaturalImageMarker, FiducialMarker"
+		echo "(Framework) 		SolARFramework" 
+		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools"		
+		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
+		echo "(RA Samples)		NaturalImageMarker, FiducialMarker"
+		echo "(Unit Tests)		UnitTests"
 		;;
 	*)
 		buildTargets release "$generator" $TARGET
