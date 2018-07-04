@@ -116,6 +116,7 @@ case "$TARGET" in
 		cmake -H../../sources/SolARTests/unittests/ComponentLoading -B./SolARTests/unittests/ComponentLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd SolARTests/unittests/ComponentLoading
 		cmake --build . --config $BUILDCONFIG
+		cd ../../../
 		;;
 	*)
 		echo "unknown target"
@@ -184,6 +185,8 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARDescriptorExtractorNonFree
 		buildTargets release "$generator" SolARDescriptorMatcherNonFree
 		buildTargets release "$generator" SolARHomographyEstimationNonFree
+		# unit tests
+		buildTargets release "$generator" UnitTests
 
 		# debug
 		buildTargets debug "$generator" SolARFramework
@@ -202,6 +205,8 @@ case "$TARGET" in
 		buildTargets debug "$generator" SolARDescriptorExtractorNonFree
 		buildTargets debug "$generator" SolARDescriptorMatcherNonFree
 		buildTargets debug "$generator" SolARHomographyEstimationNonFree		
+		# unit tests
+		buildTargets debug "$generator" UnitTests
 		;;
 	"clean")
 		cd ..
