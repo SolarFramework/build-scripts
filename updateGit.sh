@@ -32,7 +32,7 @@ done
 
 
 # Samples
-samples=` find sources/Samples/ -mindepth 1 -maxdepth 1 -type d`
+samples=`find sources/Samples/ -mindepth 1 -maxdepth 1 -type d`
 for sample in $samples
 do
 	cd $sample
@@ -40,3 +40,8 @@ do
 	cd $CURRENTDIR
 	echo ""
 done
+
+# Unit Tests
+cd sources/SolARTests
+updateGit $1
+cd $CURRENTDIR
