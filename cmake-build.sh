@@ -53,6 +53,12 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
+	"Sample-Slam")
+		cmake -H../../sources/Samples/Sample-Slam -B./Samples/Sample-Slam -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam
+		cmake --build . --config $BUILDCONFIG
+		cd ../..
+		;;		
 	"SolARCameraCalibration")
 		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static -B./Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static
@@ -175,12 +181,13 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleTools
 		buildTargets release "$generator" NaturalImageMarker
 		buildTargets release "$generator" FiducialMarker
+		#buildTargets release "$generator" Sample-Slam
 		# tests "free"
 		buildTargets release "$generator" SolARCameraCalibration
 		buildTargets release "$generator" SolARDescriptorMatcher
 		buildTargets release "$generator" SolARImageConvertor
 		buildTargets release "$generator" SolARImageLoader
-		buildTargets release "$generator" SolARSVDtriangulation
+		#buildTargets release "$generator" SolARSVDtriangulation
 		# tests "non free"
 		buildTargets release "$generator" SolARDescriptorExtractorNonFree
 		buildTargets release "$generator" SolARDescriptorMatcherNonFree
@@ -195,12 +202,13 @@ case "$TARGET" in
 		buildTargets debug "$generator" SolARModuleTools
 		buildTargets debug "$generator" NaturalImageMarker
 		buildTargets debug "$generator" FiducialMarker
+		#buildTargets debug "$generator" Sample-Slam		
 		# tests "free"
 		buildTargets debug "$generator" SolARCameraCalibration
 		buildTargets debug "$generator" SolARDescriptorMatcher
 		buildTargets debug "$generator" SolARImageConvertor
 		buildTargets debug "$generator" SolARImageLoader
-		buildTargets debug "$generator" SolARSVDtriangulation
+		#buildTargets debug "$generator" SolARSVDtriangulation
 		# tests "non free"
 		buildTargets debug "$generator" SolARDescriptorExtractorNonFree
 		buildTargets debug "$generator" SolARDescriptorMatcherNonFree
@@ -217,7 +225,7 @@ case "$TARGET" in
 		echo "(Framework) 		SolARFramework" 
 		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools"		
 		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
-		echo "(RA Samples)		NaturalImageMarker, FiducialMarker"
+		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam"
 		echo "(Unit Tests)		UnitTests"
 		;;
 	*)
