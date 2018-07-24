@@ -181,7 +181,7 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleTools
 		buildTargets release "$generator" NaturalImageMarker
 		buildTargets release "$generator" FiducialMarker
-		#buildTargets release "$generator" Sample-Slam
+		buildTargets release "$generator" Sample-Slam
 		# tests "free"
 		buildTargets release "$generator" SolARCameraCalibration
 		buildTargets release "$generator" SolARDescriptorMatcher
@@ -202,7 +202,7 @@ case "$TARGET" in
 		buildTargets debug "$generator" SolARModuleTools
 		buildTargets debug "$generator" NaturalImageMarker
 		buildTargets debug "$generator" FiducialMarker
-		#buildTargets debug "$generator" Sample-Slam		
+		buildTargets debug "$generator" Sample-Slam		
 		# tests "free"
 		buildTargets debug "$generator" SolARCameraCalibration
 		buildTargets debug "$generator" SolARDescriptorMatcher
