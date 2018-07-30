@@ -58,7 +58,13 @@ case "$TARGET" in
 		cd Samples/Sample-Slam
 		cmake --build . --config $BUILDCONFIG
 		cd ../..
-		;;		
+		;;
+	"Sample-Triangulation")
+		cmake -H../../sources/Samples/Sample-Triangulation -B./Samples/Sample-Triangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Triangulation
+		cmake --build . --config $BUILDCONFIG
+		cd ../..
+		;;				
 	"SolARCameraCalibration")
 		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static -B./Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static
@@ -182,6 +188,7 @@ case "$TARGET" in
 		buildTargets release "$generator" NaturalImageMarker
 		buildTargets release "$generator" FiducialMarker
 		buildTargets release "$generator" Sample-Slam
+		buildTargets release "$generator" Sample-Triangulation
 		# tests "free"
 		buildTargets release "$generator" SolARCameraCalibration
 		buildTargets release "$generator" SolARDescriptorMatcher
@@ -203,6 +210,7 @@ case "$TARGET" in
 		buildTargets debug "$generator" NaturalImageMarker
 		buildTargets debug "$generator" FiducialMarker
 		buildTargets debug "$generator" Sample-Slam		
+		buildTargets debug "$generator" Sample-Triangulation
 		# tests "free"
 		buildTargets debug "$generator" SolARCameraCalibration
 		buildTargets debug "$generator" SolARDescriptorMatcher
@@ -225,7 +233,7 @@ case "$TARGET" in
 		echo "(Framework) 		SolARFramework" 
 		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools"		
 		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
-		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam"
+		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
 		;;
 	*)
