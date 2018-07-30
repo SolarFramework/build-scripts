@@ -53,6 +53,7 @@ cd Samples
 git clone -b develop git@github.com:SolarFramework/NaturalImageMarker.git
 git clone -b develop git@github.com:SolarFramework/FiducialMarker.git
 git clone -b develop git@github.com:SolarFramework/Sample-Slam.git
+git clone -b develop git@github.com:SolarFramework/Sample-Triangulation.git
 cd ..
 
 git clone -b develop git@github.com:SolarFramework/SolARTests.git
