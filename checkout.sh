@@ -11,6 +11,7 @@ fi
 cd $1
 repo_fullname=`git rev-parse --show-toplevel`
 repo_name=`basename $repo_fullname`
+echo ""
 echo "REPOSITORY: $repo_name"
 current_branch=`git rev-parse --abbrev-ref HEAD`
 echo "CURRENT BRANCH: $current_branch"
