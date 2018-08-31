@@ -28,6 +28,7 @@ mkdir -p Modules
 cd Modules
 git clone -b develop git@github.com:SolarFramework/SolARModuleOpenCV.git
 git clone -b develop git@github.com:SolarFramework/SolARModuleTools.git
+git clone -b develop git@github.com:SolarFramework/SolARModuleOpenGL.git
 cd ..
 
 mkdir -p Samples

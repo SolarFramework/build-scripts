@@ -41,15 +41,22 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG --target install	
 		cd ../..
 		;;
+	"SolARModuleOpenGL")
+		cmake -H../../sources/Modules/SolARModuleOpenGL -B./Modules/SolARModuleOpenGL -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenGL
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install	
+		cd ../..
+		;;		
 	"NaturalImageMarker")
-		cmake -H../../sources/Samples/NaturalImageMarker/Static -B./Samples/NaturalImageMarker/Static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Samples/NaturalImageMarker/Static
+		cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/Dynamic
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
 	"FiducialMarker")
-		cmake -H../../sources/Samples/FiducialMarker/Static -B./Samples/FiducialMarker/Static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Samples/FiducialMarker/Static
+		cmake -H../../sources/Samples/FiducialMarker/Dynamic -B./Samples/FiducialMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/Dynamic
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
@@ -72,8 +79,8 @@ case "$TARGET" in
 		cd ../../../../../
 		;;
 	"SolARDescriptorMatcher")
-		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/static -B./Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/static
+		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/dynamic -B./Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/dynamic
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
 		;;
@@ -88,8 +95,8 @@ case "$TARGET" in
 		cd ../../../../../
 		;;
 	"SolARImageLoader")
-		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolARImageLoader/static -B./Modules/SolARModuleOpenCV/tests/SolARImageLoader/static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Modules/SolARModuleOpenCV/tests/SolARImageLoader/static
+		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolARImageLoader/dynamic -B./Modules/SolARModuleOpenCV/tests/SolARImageLoader/dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenCV/tests/SolARImageLoader/dynamic
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
 		;;
@@ -102,14 +109,14 @@ case "$TARGET" in
 		cd ../../../../
 		;;
 	"SolARDescriptorExtractorNonFree")
-		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/static -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/static
+		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
 		;;
 	"SolARDescriptorMatcherNonFree")
-		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/static -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/static
+		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/dynamic -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/dynamic
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
 		;;
@@ -185,6 +192,7 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleOpenCV
 		buildTargets release "$generator" SolARModuleNonFreeOpenCV
 		buildTargets release "$generator" SolARModuleTools
+		buildTargets release "$generator" SolARModuleOpenGL		
 		buildTargets release "$generator" NaturalImageMarker
 		buildTargets release "$generator" FiducialMarker
 		buildTargets release "$generator" Sample-Slam
@@ -207,6 +215,7 @@ case "$TARGET" in
 		buildTargets debug "$generator" SolARModuleOpenCV
 		buildTargets debug "$generator" SolARModuleNonFreeOpenCV
 		buildTargets debug "$generator" SolARModuleTools
+		buildTargets debug "$generator" SolARModuleOpenGL				
 		buildTargets debug "$generator" NaturalImageMarker
 		buildTargets debug "$generator" FiducialMarker
 		buildTargets debug "$generator" Sample-Slam		
@@ -231,7 +240,7 @@ case "$TARGET" in
 	"list")
 		echo "Available targets:"
 		echo "(Framework) 		SolARFramework" 
-		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools"		
+		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL"		
 		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
 		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
