@@ -187,51 +187,42 @@ cd build
 
 case "$TARGET" in
 	"all" )
-		# release
 		buildTargets release "$generator" SolARFramework
+		buildTargets debug "$generator" SolARFramework
+
 		buildTargets release "$generator" SolARModuleOpenCV
-		buildTargets release "$generator" SolARModuleNonFreeOpenCV
+		buildTargets debug "$generator" SolARModuleOpenCV
+
 		buildTargets release "$generator" SolARModuleTools
+		buildTargets debug "$generator" SolARModuleTools
+
 		buildTargets release "$generator" SolARModuleOpenGL		
+		buildTargets debug "$generator" SolARModuleOpenGL				
+
 		buildTargets release "$generator" NaturalImageMarker
+		buildTargets debug "$generator" NaturalImageMarker
+
 		buildTargets release "$generator" FiducialMarker
-		buildTargets release "$generator" Sample-Slam
-		buildTargets release "$generator" Sample-Triangulation
+		buildTargets debug "$generator" FiducialMarker
+
 		# tests "free"
 		buildTargets release "$generator" SolARCameraCalibration
-		buildTargets release "$generator" SolARDescriptorMatcher
-		buildTargets release "$generator" SolARImageConvertor
-		buildTargets release "$generator" SolARImageLoader
-		#buildTargets release "$generator" SolARSVDtriangulation
-		# tests "non free"
-		buildTargets release "$generator" SolARDescriptorExtractorNonFree
-		buildTargets release "$generator" SolARDescriptorMatcherNonFree
-		buildTargets release "$generator" SolARHomographyEstimationNonFree
-		# unit tests
-		buildTargets release "$generator" UnitTests
-
-		# debug
-		buildTargets debug "$generator" SolARFramework
-		buildTargets debug "$generator" SolARModuleOpenCV
-		buildTargets debug "$generator" SolARModuleNonFreeOpenCV
-		buildTargets debug "$generator" SolARModuleTools
-		buildTargets debug "$generator" SolARModuleOpenGL				
-		buildTargets debug "$generator" NaturalImageMarker
-		buildTargets debug "$generator" FiducialMarker
-		buildTargets debug "$generator" Sample-Slam		
-		buildTargets debug "$generator" Sample-Triangulation
-		# tests "free"
 		buildTargets debug "$generator" SolARCameraCalibration
+		buildTargets release "$generator" SolARDescriptorMatcher
 		buildTargets debug "$generator" SolARDescriptorMatcher
+		buildTargets release "$generator" SolARImageConvertor
 		buildTargets debug "$generator" SolARImageConvertor
+		buildTargets release "$generator" SolARImageLoader
 		buildTargets debug "$generator" SolARImageLoader
-		#buildTargets debug "$generator" SolARSVDtriangulation
-		# tests "non free"
-		buildTargets debug "$generator" SolARDescriptorExtractorNonFree
-		buildTargets debug "$generator" SolARDescriptorMatcherNonFree
-		buildTargets debug "$generator" SolARHomographyEstimationNonFree		
+
+		#buildTargets release "$generator" SolARSVDtriangulation
 		# unit tests
-		buildTargets debug "$generator" UnitTests
+		#buildTargets release "$generator" UnitTests
+
+		# tests "free"
+		#buildTargets debug "$generator" SolARSVDtriangulation
+		# unit tests
+		#buildTargets debug "$generator" UnitTests
 		;;
 	"clean")
 		cd ..
@@ -244,6 +235,25 @@ case "$TARGET" in
 		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
 		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
+		;;
+	"nonfree")
+		buildTargets release "$generator" SolARModuleNonFreeOpenCV
+		buildTargets debug "$generator" SolARModuleNonFreeOpenCV
+		# tests "non free"
+		buildTargets release "$generator" SolARDescriptorExtractorNonFree
+		buildTargets release "$generator" SolARDescriptorMatcherNonFree
+		buildTargets release "$generator" SolARHomographyEstimationNonFree
+
+		buildTargets release "$generator" Sample-Triangulation
+		buildTargets debug "$generator" Sample-Triangulation
+
+		buildTargets release "$generator" Sample-Slam
+		buildTargets debug "$generator" Sample-Slam	
+
+		# tests "non free"
+		buildTargets debug "$generator" SolARDescriptorExtractorNonFree
+		buildTargets debug "$generator" SolARDescriptorMatcherNonFree
+		buildTargets debug "$generator" SolARHomographyEstimationNonFree		
 		;;
 	*)
 		buildTargets release "$generator" $TARGET

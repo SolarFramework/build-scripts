@@ -17,7 +17,7 @@ current_branch=`git rev-parse --abbrev-ref HEAD`
 echo "CURRENT BRANCH: $current_branch"
 echo
 
-branches=`git branch -r | grep -v HEAD` 
+branches=`git branch -r --sort=refname | grep -v HEAD` 
 branches=${branches//\*/}
 branches=${branches//origin\//}
 
