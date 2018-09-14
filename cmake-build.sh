@@ -36,15 +36,31 @@ cmake --build . --config $BUILDCONFIG
 cmake --build . --config $BUILDCONFIG --target install	
 cd ../..
 
-cmake -H../../sources/Samples/NaturalImageMarker/Static -B./Samples/NaturalImageMarker/Static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Samples/NaturalImageMarker/Static
+cmake -H../../sources/Modules/SolARModuleOpenGL -B./Modules/SolARModuleOpenGL -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Modules/SolARModuleOpenGL
+cmake --build . --config $BUILDCONFIG
+cmake --build . --config $BUILDCONFIG --target install	
+cd ../..
+
+cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/NaturalImageMarker/Dynamic
 cmake --build . --config $BUILDCONFIG
 cd ../../..
 
-cmake -H../../sources/Samples/FiducialMarker/Static -B./Samples/FiducialMarker/Static -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Samples/FiducialMarker/Static
+cmake -H../../sources/Samples/FiducialMarker/Dynamic -B./Samples/FiducialMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/FiducialMarker/Dynamic
 cmake --build . --config $BUILDCONFIG
 cd ../../..
+
+cmake -H../../sources/Samples/Sample-Triangulation -B./Samples/Sample-Triangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/Sample-Triangulation
+cmake --build . --config $BUILDCONFIG
+cd ../..
+
+cmake -H../../sources/Samples/Sample-Slam -B./Samples/Sample-Slam -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/Sample-Slam
+cmake --build . --config $BUILDCONFIG
+cd ../..
 
 cd ..
 

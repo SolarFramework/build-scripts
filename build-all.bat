@@ -38,15 +38,30 @@ cd Modules/SolARModuleTools
 nmake install
 cd ../..
 
-cmake -H../../sources/Samples/NaturalImageMarker/Static -B./Samples/NaturalImageMarker/Static -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cmake -H../../sources/Modules/SolARModuleOpenGL -B./Modules/SolARModuleOpenGL -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Modules/SolARModuleOpenGL
+nmake install
+cd ../..
+
+cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
 cd Samples/NaturalImageMarker/Static
 nmake
 cd ../../..
 
-cmake -H../../sources/Samples/FiducialMarker/Static -B./Samples/FiducialMarker/Static -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cmake -H../../sources/Samples/FiducialMarker/Dynamic -B./Samples/FiducialMarker/Dynamic -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
 cd Samples/FiducialMarker/Static
 nmake
 cd ../../..
+
+cmake -H../../sources/Samples/Sample-Triangulation -B./Samples/Sample-Triangulation -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Samples/Sample-Triangulation
+nmake
+cd ../..
+
+cmake -H../../sources/Samples/Sample-Slam -B./Samples/Sample-Slam -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=%BUILDCONFIG%
+cd Samples/Sample-Slam
+nmake
+cd ../..
 cd ..
 EXIT /B 0
 

@@ -27,15 +27,31 @@ cd Modules/SolARModuleTools
 make install
 cd ../..
 
-cmake -H../../sources/Samples/NaturalImageMarker/Static -B./Samples/NaturalImageMarker/Static -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Samples/NaturalImageMarker/Static
+cmake -H../../sources/Modules/SolARModuleOpenGL -B./Modules/SolARModuleOpenGL -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Modules/SolARModuleOpenGL
+make install
+cd ../..
+
+cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/NaturalImageMarker/Dynamic
 make
 cd ../../..
 
-cmake -H../../sources/Samples/FiducialMarker/Static -B./Samples/FiducialMarker/Static -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-cd Samples/FiducialMarker/Static
+cmake -H../../sources/Samples/FiducialMarker/Dynamic -B./Samples/FiducialMarker/Dynamic -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/FiducialMarker/Dynamic
 make
 cd ../../..
+
+cmake -H../../sources/Samples/Sample_Triangulation -B./Samples/Sample_Triangulation -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/Sample_Triangulation
+make
+cd ../..
+
+cmake -H../../sources/Samples/Sample_Slam -B./Samples/Sample_Slam -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+cd Samples/Sample_Slam
+make
+cd ../..
+
 cd ..
 
 }

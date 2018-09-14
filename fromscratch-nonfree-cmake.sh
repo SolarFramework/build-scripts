@@ -46,12 +46,15 @@ cd Modules
 git clone -b develop git@github.com:SolarFramework/SolARModuleOpenCV.git
 git clone -b develop git@github.com:SolarFramework/SolARModuleNonFreeOpenCV.git
 git clone -b develop git@github.com:SolarFramework/SolARModuleTools.git
+git clone -b develop git@github.com:SolarFramework/SolARModuleOpenGL.git
 cd ..
 
 mkdir -p Samples
 cd Samples
 git clone -b develop git@github.com:SolarFramework/NaturalImageMarker.git
 git clone -b develop git@github.com:SolarFramework/FiducialMarker.git
+git clone -b develop git@github.com:SolarFramework/Sample-Triangulation.git
+git clone -b develop git@github.com:SolarFramework/Sample-Slam.git
 cd ../..
 
 ./build-scripts/build-all.sh

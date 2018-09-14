@@ -124,16 +124,16 @@ if [ "$1" == "release" ]; then
   #cd build/release
   makeAndInstall="makeAndInstallRelease"
   MAKEFILE="-f Makefile.Release"
-  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH
-  echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
+  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH
+  echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
 
 else
   #cd build/debug
   BUILDPATH="../build/debug"
   makeAndInstall="makeAndInstallDebug"
   MAKEFILE="-f Makefile.Debug"
-  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH
-  echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
+  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH
+  echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
 fi
 
 
@@ -162,34 +162,40 @@ echo
 echo "##### BUILDING SOLAR MODULE OPENCV TESTS"
 $makeAndInstall "SolARCameraCalibration" "Modules/SolARModuleOpenCV/tests/SolARCameraCalibration/static/SolARCameraCalibration.pro"
 echo -e "${GREEN} SolARCameraCalibration static $1 is successfully built${NC}"
-$makeAndInstall "SolARImageConvertorDynamic" "Modules/SolARModuleOpenCV/tests/SolARImageConvertor/dynamic/SolARImageConvertorOpencvTest.pro"
-echo -e "${GREEN} SolARImageConvertor dynamic $1 is successfully built${NC}"
-$makeAndInstall "SolARImageLoaderDynamic" "Modules/SolARModuleOpenCV/tests/SolARImageLoader/dynamic/SolARImageOpenCVDynTest.pro"
-echo -e "${GREEN} SolARImageLoader dynamic $1 is successfully built${NC}"
-$makeAndInstall "SolARImageLoaderStatic" "Modules/SolARModuleOpenCV/tests/SolARImageLoader/static/SolARImageOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARImageLoader static $1 is successfully built${NC}"
-$makeAndInstall "SolARSVDtriangulation static" "Modules/SolARModuleOpenCV/tests/SolARSVDtriangulation/SolARSVDTriangulationOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARSVDtriangulation static $1 is successfully built${NC}"
+$makeAndInstall "SolARDescriptorMatcher" "Modules/SolARModuleOpenCV/tests/SolARDescriptorMatcher/dynamic/SolARDescriptorMatcherOpenCVDynTest.pro"
+echo -e "${GREEN} SolARDescriptorMatcher $1 is successfully built${NC}"
+$makeAndInstall "SolARFiducialMarker" "Modules/SolARModuleOpenCV/tests/SolARFiducialMarker/dynamic/SolARMarker2DFiducialOpenCVTest.pro"
+echo -e "${GREEN} SolARFiducialMarker $1 is successfully built${NC}"
+$makeAndInstall "SolARFundamentalMatrixDecomposer" "Modules/SolARModuleOpenCV/tests/SolARFundamentalMatrixDecomposer/SolARFundamentalMatrixDecomposerOpenCVTest.pro"
+echo -e "${GREEN} SolARFundamentalMatrixDecomposer $1 is successfully built${NC}"
+$makeAndInstall "SolARFundamentalMatrixEstimation" "Modules/SolARModuleOpenCV/tests/SolARFundamentalMatrixEstimation/SolARFundamentalMatrixEstimationOpenCVTest.pro"
+echo -e "${GREEN} SolARFundamentalMatrixEstimation $1 is successfully built${NC}"
+$makeAndInstall "SolARImageConvertor" "Modules/SolARModuleOpenCV/tests/SolARImageConvertor/dynamic/SolARImageConvertorOpencvTest.pro"
+echo -e "${GREEN} SolARImageConvertor $1 is successfully built${NC}"
+$makeAndInstall "SolARImageLoader" "Modules/SolARModuleOpenCV/tests/SolARImageLoader/dynamic/SolARImageOpenCVDynTest.pro"
+echo -e "${GREEN} SolARImageLoader $1 is successfully built${NC}"
+$makeAndInstall "SolARMatchesFilter" "Modules/SolARModuleOpenCV/tests/SolARMatchesFilter/SolARMatchesFilterTest.pro"
+echo -e "${GREEN} SolARMatchesFilter static $1 is successfully built${NC}"
+$makeAndInstall "SolARSVDtriangulation" "Modules/SolARModuleOpenCV/tests/SolARSVDtriangulation/SolARSVDTriangulationOpenCVTest.pro"
+echo -e "${GREEN} SolARSVDtriangulation $1 is successfully built${NC}"
 ;;
 "modulenonfreeopencvtests")
 echo
 echo "##### BUILDING SOLAR MODULE NON FREE OPENCV TESTS"
-$makeAndInstall "SolARDescriptorExtractorDynamic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic/SolARDescriptorExtractorOpenCVDynTest.pro"
+$makeAndInstall "SolARDescriptorExtractorDynamic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/SolARDescriptorExtractorOpenCVNonFreeTest.pro"
 echo -e "${GREEN} SolARDescriptorExtractor dynamic $1 is successfully built${NC}"
-$makeAndInstall "SolARDescriptorExtractorStatic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/static/SolARDescriptorExtractorOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARDescriptorExtractor static $1 is successfully built${NC}"
-$makeAndInstall "SolARDescriptorMatcherDynamic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/dynamic/SolARDescriptorMatcherOpenCVDynTest.pro"
-echo -e "${GREEN} SolARDescriptorMatcher dynamic $1 is successfully built${NC}"
-$makeAndInstall "SolARDescriptorMatcherStatic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/static/SolARDescriptorMatcherOpenCVStaticTest.pro"
-echo -e "${GREEN} SolARDescriptorMatcher static $1 is successfully built${NC}"
-$makeAndInstall "SolARHomographyEstimationStatic" "Modules/SolARModuleNonFreeOpenCV/tests/SolARHomographyEstimation/static/SolARHomographyEstimationStaticTest.pro"
-echo -e "${GREEN} SolARHomographyEstimation static $1 is successfully built${NC}"
 ;;
 "moduletools")
 echo
 echo "##### BUILDING SOLAR MODULE TOOLS"
 $makeAndInstall "SolARModuleTools" "Modules/SolARModuleTools/SolARModuleTools.pro"
 echo -e "${GREEN} SolARModuleTools $1 is successfully built${NC}"
+;;
+"moduleopengl")
+echo
+echo "##### BUILDING SOLAR MODULE OPENGL"
+$makeAndInstall "SolARModuleTools" "Modules/SolARModuleOpenGL/SolARModuleOpenGL.pro"
+echo -e "${GREEN} SolARModuleOpenGL $1 is successfully built${NC}"
 ;;
 "xpcf")
 echo
@@ -210,26 +216,24 @@ echo
 echo "##### BUILDING FIDUCIAL MARKER SAMPLE"
 $makeAndInstall "Samples/FiducialMarkerDynamic" "Samples/FiducialMarker/Dynamic/SolARFiducialMarkerSampleDynamic.pro"
 echo -e "${GREEN} Fiducial Marker Dynamic sample $1 is successfully built${NC}"
-$makeAndInstall "Samples/FiducialMarkerStatic" "Samples/FiducialMarker/Static/SolARFiducialMarkerSampleStatic.pro"
-echo -e "${GREEN} Fiducial Marker Static sample $1 is successfully built${NC}"
-$makeAndInstall "Samples/FiducialMarkerSimple" "Samples/FiducialMarker/Simple/SolARFiducialMarkerSampleSimple.pro"
-echo -e "${GREEN} Fiducial Marker Simple sample $1 is successfully built${NC}"
 ;;
 "naturalimagemarkersample")
 echo
 echo "##### BUILDING NATURAL IMAGE MARKER SAMPLE"
 $makeAndInstall "Samples/NaturalImageMarkerDynamic" "Samples/NaturalImageMarker/Dynamic/SolARNaturalImageMarkerDyn.pro"
 echo -e "${GREEN} Natural Image Marker Dynamic sample $1 is successfully built${NC}"
-$makeAndInstall "Samples/NaturalImageMarkerStatic" "Samples/NaturalImageMarker/Static/SolARNaturalImageMarkerStatic.pro"
-echo -e "${GREEN} Natural Image Marker Static sample $1 is successfully built${NC}"
-$makeAndInstall "Samples/NaturalImageMarkerSimple" "Samples/NaturalImageMarker/Simple/SolARNaturalImageMarkerSimple.pro"
-echo -e "${GREEN} Natural Image Marker Simple sample $1 is successfully built${NC}"
 ;;
 "triangulationsample")
 echo
 echo "##### BUILDING TRIANGULATION SAMPLE"
 $makeAndInstall "Samples/Sample-Triangulation/" "Samples/Sample-Triangulation/SolARTriangulationSample.pro"
 echo -e "${GREEN} Triangulation sample $1 is successfully built${NC}"
+;;
+"slamsample")
+echo
+echo "##### BUILDING SLAM SAMPLE"
+$makeAndInstall "Samples/Sample-Slam/" "Samples/Sample-Slam/SolARSlamSample.pro"
+echo -e "${GREEN} Slam sample $1 is successfully built${NC}"
 ;;
 "buildall")
 $0 $1 xpcf
@@ -239,9 +243,11 @@ $0 $1 modulenonfreeopencv
 $0 $1 moduleopencvtests
 $0 $1 modulenonfreeopencvtests
 $0 $1 moduletools
+$0 $1 moduleopengl
 $0 $1 fiducialmarkersample
 $0 $1 naturalimagemarkersample
 $0 $1 triangulationsample
+$0 $1 slamsample
 
 find $BUILDPATH/ -name "lib*so*" -exec cp {}  $BUILDPATH/bin/ \;
 find $BUILDPATH/ -name "*.dll" -exec cp {}  $BUILDPATH/bin/ \;

@@ -31,12 +31,14 @@ def PROJECT_NAME = "argo"
 					cd Modules
                     git clone -b develop https://$USER_GITHUB:$PASSWORD_GITHUB@github.com/SolarFramework/SolARModuleOpenCV.git
                     git clone -b develop https://$USER_GITHUB:$PASSWORD_GITHUB@github.com/SolarFramework/SolARModuleTools.git
+					git clone -b develop https://$USER_GITHUB:$PASSWORD_GITHUB@github.com/SolarFramework/SolARModuleOpenGL.git
                     cd ..
 					mkdir -p Samples
                     cd Samples
                     git clone -b develop https://$USER_GITHUB:$PASSWORD_GITHUB@github.com/SolarFramework/NaturalImageMarker.git
                     git clone -b develop https://$USER_GITHUB:$PASSWORD_GITHUB@github.com/SolarFramework/FiducialMarker.git
 					git clone -b develop https://$USER_GITHUB:$PASSWORD_GITHUB@github.com/SolarFramework/Sample-Triangulation.git
+					git clone -b develop https://$USER_GITHUB:$PASSWORD_GITHUB@github.com/SolarFramework/Sample-Slam.git
                     cd ..                    
                 '''
 
@@ -111,6 +113,19 @@ def PROJECT_NAME = "argo"
                 '''
             }
         }
+		
+		stage("build SolARModuleOpenGL"){
+            sshagent(['82aa1de0-eeca-4252-8d86-074bb8a684f0']) {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release moduleopengl
+                '''
+            }
+        }
 
         
         stage("build Fiducial Marker Sample"){
@@ -148,6 +163,19 @@ def PROJECT_NAME = "argo"
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     cd SolAR
                     ./build-scripts/solarbuild.sh release triangulationsample
+                '''
+            }
+        }
+		
+		stage("build Slam Sample"){
+            sshagent(['82aa1de0-eeca-4252-8d86-074bb8a684f0']) {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release slamsample
                 '''
             }
         }

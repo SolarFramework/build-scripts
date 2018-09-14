@@ -41,16 +41,16 @@ if [ "$1" == "release" ]; then
   #cd build/release
   solarmake="makeRelease"
   MAKEFILE="-f Makefile.Release"
-  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH
-  #echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
+  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH
+  #echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/release/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/release/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
 
 else
   #cd build/debug
   BUILDPATH="build/debug"
   solarmake="makeDebug"
   MAKEFILE="-f Makefile.Debug"
-  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH
-  #echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.2.0/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.64.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
+  export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH
+  #echo "export LD_LIBRARY_PATH=./:$BCOMDEVROOT/thirdParties/opencv/3.4.3/lib/x86_64/shared/debug/:$BCOMDEVROOT/thirdParties/boost/1.68.0/lib/x86_64/shared/debug/:$LD_LIBRARY_PATH" > $BUILDPATH/bin/README
 fi
 
 

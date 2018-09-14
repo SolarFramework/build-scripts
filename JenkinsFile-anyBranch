@@ -1,6 +1,6 @@
 def PROJECT_USER = "svc-prj-argo"
 def PROJECT_NAME = "argo"
-def pipelineDescription="SolARFramework was built on branch ${env.frameworkBranch}" + "\n" +"SolARModuleOpenCV was built on branch ${env.moduleOpencvBranch}" + "\n" + "SolARModuleTools was built on branch ${env.moduleToolsBranch}" + "\n" + "FiducialMarker was built on branch ${env.fiducialBranch}" + "\n" + "NaturalImage was built on branch ${env.naturalBranch}"
+def pipelineDescription="SolARFramework was built on branch ${env.frameworkBranch}" + "\n" +"SolARModuleOpenCV was built on branch ${env.moduleOpencvBranch}" + "\n" + "SolARModuleTools was built on branch ${env.moduleToolsBranch}" + "SolARModuleOpenGL was built on branch ${env.moduleOpenGLBranch}" + "\n" + "FiducialMarker was built on branch ${env.fiducialBranch}" + "\n" + "SLAM was built on branch ${env.slamBranch}" + "\n" + "Triangulation was built on branch ${env.triangulationBranch}" 
 currentBuild.description = pipelineDescription
 def allBranchesAndCommits
 
@@ -14,13 +14,16 @@ pipeline {
             environment {
                 USERNAMEPWD = credentials('github-solarBcom')
                 artifactoryApiKey=credentials('artifactoryApiKey')
+                BinariesBranch="${env.BinariesBranch}"
                 frameworkBranch="${env.frameworkBranch}"
                 moduleOpencvBranch="${env.moduleOpencvBranch}"
                 moduleNonFreeOpencvBranch="${env.moduleNonFreeOpencvBranch}"
                 moduleToolsBranch="${env.moduleToolsBranch}"
+                moduleOpenGLBranch="${env.moduleOpenGLBranch}"
                 naturalBranch="${env.naturalBranch}"
                 fiducialBranch="${env.fiducialBranch}"
 				triangulationBranch="${env.triangulationBranch}"
+				slamBranch="${env.slamBranch}"
                 buildNonFree="${env.buildNonFree}"
 				buildTriangulationSample="${env.buildTriangulationSample}"
             }
@@ -38,19 +41,15 @@ pipeline {
                     git clone https://github.com/b-com-software-basis/builddefs-qmake.git $BCOMDEVROOT/builddefs/qmake
                     cd tools
                     if [ $buildNonFree = 'true' ]; then
-                        curl -L https://raw.githubusercontent.com/SolarFramework/binaries/master/packagedependencies-bcom.txt -o packagedependencies.txt
+                        curl -L https://raw.githubusercontent.com/SolarFramework/binaries/$BinariesBranch/packagedependencies-bcom.txt -o packagedependencies.txt
                     else
-                        curl -L https://raw.githubusercontent.com/SolarFramework/binaries/master/packagedependencies-bcom.txt -o packagedependencies.txt
+                        curl -L https://raw.githubusercontent.com/SolarFramework/binaries/$BinariesBranch/packagedependencies.txt -o packagedependencies.txt
                     fi
                     curl -L https://github.com/SolarFramework/binaries/releases/download/pkgm-bcom%2F1.0.0%2Fmulti/pkgm-1.0.0-fat.jar -o pkgm-1.0.0-fat.jar
                     java -jar pkgm-1.0.0-fat.jar install -a x86_64 -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
                     cd ..
                     cd SolAR
-					if [ $buildTriangulationSample = 'true' ]; then
-						git clone -b feature/triangulation https://$USERNAMEPWD@github.com/SolarFramework/build-scripts.git
-					else
-						git clone https://$USERNAMEPWD@github.com/SolarFramework/build-scripts.git
-                    fi
+					git clone https://$USERNAMEPWD@github.com/SolarFramework/build-scripts.git
 					chmod +x build-scripts/*.sh
                     git clone -b $frameworkBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARFramework.git
                     mkdir -p Modules
@@ -58,14 +57,14 @@ pipeline {
                     git clone -b $moduleOpencvBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARModuleOpenCV.git
                     git clone -b $moduleNonFreeOpencvBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARModuleNonFreeOpenCV.git
                     git clone -b $moduleToolsBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARModuleTools.git
+                    git clone -b $moduleOpenGLBranch https://$USERNAMEPWD@github.com/SolarFramework/SolARModuleOpenGL.git
                     cd ..
                     mkdir -p Samples
                     cd Samples
                     git clone -b $naturalBranch https://$USERNAMEPWD@github.com/SolarFramework/NaturalImageMarker.git
-                    git clone -b  $fiducialBranch https://$USERNAMEPWD@github.com/SolarFramework/FiducialMarker.git
-					if [ $buildTriangulationSample = 'true' ]; then
-						git clone -b $triangulationBranch https://$USERNAMEPWD@github.com/SolarFramework/Sample-Triangulation.git
-                    fi
+                    git clone -b $fiducialBranch https://$USERNAMEPWD@github.com/SolarFramework/FiducialMarker.git
+				    git clone -b $triangulationBranch https://$USERNAMEPWD@github.com/SolarFramework/Sample-Triangulation.git
+                    git clone -b $slamBranch https://$USERNAMEPWD@github.com/SolarFramework/Sample-Slam.git
 					cd ..
                 '''
                 script {
@@ -75,10 +74,12 @@ pipeline {
                     def moduleOpencvCommit = sh returnStdout: true, script: 'git -C SolAR/Modules/SolARModuleOpenCV rev-parse --short HEAD'
                     def moduleNonFreeOpencvCommit = sh returnStdout: true, script: 'git -C SolAR/Modules/SolARModuleNonFreeOpenCV rev-parse --short HEAD'
                     def moduleToolsCommit = sh returnStdout: true, script: 'git -C SolAR/Modules/SolARModuleTools rev-parse --short HEAD'
+                    def moduleOpenGLCommit = sh returnStdout: true, script: 'git -C SolAR/Modules/SolARModuleOpenGL rev-parse --short HEAD'
                     def naturalCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/NaturalImageMarker rev-parse --short HEAD'
                     def fiducialCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/FiducialMarker rev-parse --short HEAD'
-					def triangulationCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/Sample-Triangulation rev-parse --short HEAD'
-                    allBranchesAndCommits = "\n" + "Framework:" + "\n" + frameworkBranch + "/" + frameworkCommit + "\n" + "ModuleOpenCV:" + "\n" + moduleOpencvBranch + "/" + moduleOpencvCommit + "\n" + "ModuleNonFreeOpenCV:" + "\n" + moduleNonFreeOpencvBranch + "/" + moduleNonFreeOpencvCommit + "\n" + "ModuleTools:" + "\n" +  moduleToolsBranch + "/" + moduleToolsCommit + "\n" + "NaturalImage:" + "\n" + naturalBranch + "/" +  naturalCommit + "\n" + "FiducialMarker:" + "\n" + fiducialBranch + "/" + fiducialCommit + "Triangulation:" + "\n" + triangulationBranch + "/" + triangulationCommit
+                    def triangulationCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/Sample-Triangulation rev-parse --short HEAD'
+                    def slamCommit = sh returnStdout: true, script: 'git -C SolAR/Samples/Sample-Slam rev-parse --short HEAD'
+                    allBranchesAndCommits = "\n" + "Framework:" + "\n" + frameworkBranch + "/" + frameworkCommit + "\n" + "ModuleOpenCV:" + "\n" + moduleOpencvBranch + "/" + moduleOpencvCommit + "\n" + "ModuleNonFreeOpenCV:" + "\n" + moduleNonFreeOpencvBranch + "/" + moduleNonFreeOpencvCommit + "\n" + "ModuleTools:" + "\n" +  moduleToolsBranch + "/" + moduleToolsCommit + "ModuleOpenGL:" + "\n" +  moduleOpenGLBranch + "/" + moduleOpenGLCommit + "NaturalImage:" + "\n" + naturalBranch + "/" +  naturalCommit + "\n" + "FiducialMarker:" + "\n" + fiducialBranch + "/" + fiducialCommit + "Triangulation:" + "\n" + triangulationBranch + "/" +  triangulationCommit + "\n" + "Slam:" + "\n" + slamBranch + "/" +  slamCommit + "\n" 
                     currentBuild.description=allBranchesAndCommits
                 }
             }
@@ -204,6 +205,22 @@ pipeline {
                 '''
             }
         }
+		
+		stage("build SolARModuleOpenGL"){
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release moduleopengl
+                '''
+            }
+        }
 
         stage("build Fiducial Marker Sample"){
             environment {
@@ -236,12 +253,9 @@ pipeline {
                 '''
             }
         }
-        
-        stage("build Triangulation Sample"){
-            when {
-                expression { params.buildTriangulationSample == true }
-            } 
-			environment {
+		
+		stage("build Triangulation Sample"){           
+            environment {
                 USERNAMEPWD = credentials('github-solarBcom')
             }
             steps {
@@ -255,8 +269,24 @@ pipeline {
                 '''
             }
         }
-
-
+		
+		stage("build SLAM Sample"){           
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+            }
+            steps {
+                sh '''
+                    set -e
+                    export QT_SELECT=qt5
+                    export BCOMDEVROOT=/home/jenkins/BCOMDEVROOT/linux
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    cd SolAR
+                    ./build-scripts/solarbuild.sh release slamsample
+                '''
+            }
+        }
+        
+        
     }
 
     post {

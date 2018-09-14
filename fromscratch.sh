@@ -28,12 +28,15 @@ mkdir -p Modules
 cd Modules
 git clone -b develop git@github.com:SolarFramework/SolARModuleOpenCV.git
 git clone -b develop git@github.com:SolarFramework/SolARModuleTools.git
+git clone -b develop git@github.com:SolarFramework/SolARModuleOpenGL.git
 cd ..
 
 mkdir -p Samples
 cd Samples
 git clone -b develop git@github.com:SolarFramework/NaturalImageMarker.git
 git clone -b develop git@github.com:SolarFramework/FiducialMarker.git
+git clone -b develop git@github.com:SolarFramework/Sample-Triangulation.git
+git clone -b develop git@github.com:SolarFramework/Sample-Slam.git
 cd ..
 
 echo "BUILD SOLAR FRAMEWORK"
@@ -56,13 +59,27 @@ echo
 ../build-scripts/solarbuild.sh release moduletools
 ../build-scripts/solarbuild.sh debug moduletools
 
+echo "BUILD SOLAR OPENGL TOOLS"
+echo
+../build-scripts/solarbuild.sh release moduleopengl
+../build-scripts/solarbuild.sh debug moduleopengl
 
 echo "BUILD SOLAR FIDUCIAL MARKER SAMPLE"
 echo
 ../build-scripts/solarbuild.sh release fiducialmarkersample
 ../build-scripts/solarbuild.sh debug fiducialmarkersample
 
-#echo "BUILD SOLAR NATURAL IMAGE MARKER SAMPLE"
-#echo
-#../build-scripts/solarbuild.sh release naturalimagemarkersample
-#../build-scripts/solarbuild.sh debug naturalimagemarkersample
+echo "BUILD SOLAR NATURAL IMAGE MARKER SAMPLE"
+echo
+../build-scripts/solarbuild.sh release naturalimagemarkersample
+../build-scripts/solarbuild.sh debug naturalimagemarkersample
+
+echo "BUILD SOLAR TRIANGULATION SAMPLE"
+echo
+../build-scripts/solarbuild.sh release triangulationsample
+../build-scripts/solarbuild.sh debug triangulationsample
+
+echo "BUILD SOLAR SLAM SAMPLE"
+echo
+../build-scripts/solarbuild.sh release slamsample
+../build-scripts/solarbuild.sh debug slamsample
