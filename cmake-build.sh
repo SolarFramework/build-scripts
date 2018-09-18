@@ -109,10 +109,10 @@ case "$TARGET" in
 		cd ../../../../
 		;;
 	"SolARDescriptorExtractorNonFree")
-		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor/dynamic
+		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor
 		cmake --build . --config $BUILDCONFIG
-		cd ../../../../../
+		cd ../../../../
 		;;
 	"SolARDescriptorMatcherNonFree")
 		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/dynamic -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorMatcher/dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
@@ -241,8 +241,8 @@ case "$TARGET" in
 		buildTargets debug "$generator" SolARModuleNonFreeOpenCV
 		# tests "non free"
 		buildTargets release "$generator" SolARDescriptorExtractorNonFree
-		buildTargets release "$generator" SolARDescriptorMatcherNonFree
-		buildTargets release "$generator" SolARHomographyEstimationNonFree
+		#buildTargets release "$generator" SolARDescriptorMatcherNonFree
+		#buildTargets release "$generator" SolARHomographyEstimationNonFree
 
 		buildTargets release "$generator" Sample-Triangulation
 		buildTargets debug "$generator" Sample-Triangulation
@@ -252,8 +252,8 @@ case "$TARGET" in
 
 		# tests "non free"
 		buildTargets debug "$generator" SolARDescriptorExtractorNonFree
-		buildTargets debug "$generator" SolARDescriptorMatcherNonFree
-		buildTargets debug "$generator" SolARHomographyEstimationNonFree		
+		#buildTargets debug "$generator" SolARDescriptorMatcherNonFree
+		#buildTargets debug "$generator" SolARHomographyEstimationNonFree		
 		;;
 	*)
 		buildTargets release "$generator" $TARGET
