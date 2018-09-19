@@ -151,37 +151,42 @@ return 0
 
 if [ $# -lt 1 ]; then
   echo "Usage:"
-  echo "$0 [target to build]"
+  echo "$0 [target to build] [opt: cmake generator]"
   echo "ex : $0 SolARFramework"
   echo "ex : $0 all (to build all targets)"
   echo "ex : $0 clean (to delete build folder)"
   echo "ex : $0 list (to list all targets)"
+  echo "ex : $0 all Ninja"
   exit -1
 fi
 
-
 TARGET=$1
-if [ $TARGET != "clean" ] && [ $TARGET != "list" ]; then
-	# select generator
-	echo "Select Generator"
-	if [ "$OSTYPE" == "msys" ]; then
-		options=("Visual Studio 15 2017 Win64" "Visual Studio 14 2015 Win64" "Visual Studio 12 2013 Win64" "NMake Makefiles" "NMake Makefiles JOM" "Ninja")
 
-		select opt in "${options[@]}"; do
-		    case $opt in
-		        "Visual Studio 15 2017 Win64" ) generator="Visual Studio 15 2017 Win64"; break;;
-		        "Visual Studio 14 2015 Win64" ) generator="Visual Studio 14 2015 Win64"; break;;
-		        "Visual Studio 12 2013 Win64" ) generator="Visual Studio 12 2013 Win64"; break;;
-		        "NMake Makefiles" ) generator="NMake Makefiles"; break;;
-		        "NMake Makefiles JOM" ) generator="NMake Makefiles JOM"; break;;
-		        "Ninja" ) generator="Ninja"; break;;
-		    esac
-		done
-	elif [[ "$OSTYPE" = *"linux"* ]]; then
-		generator="Unix Makefiles"
+if [ $# -lt 2 ]; then
+	if [ $TARGET != "clean" ] && [ $TARGET != "list" ]; then
+		# select generator
+		if [ "$OSTYPE" == "msys" ]; then
+			echo "Select Generator"
+			options=("Visual Studio 15 2017 Win64" "Visual Studio 14 2015 Win64" "Visual Studio 12 2013 Win64" "NMake Makefiles" "NMake Makefiles JOM" "Ninja")
+
+			select opt in "${options[@]}"; do
+			    case $opt in
+			        "Visual Studio 15 2017 Win64" ) generator="Visual Studio 15 2017 Win64"; break;;
+			        "Visual Studio 14 2015 Win64" ) generator="Visual Studio 14 2015 Win64"; break;;
+			        "Visual Studio 12 2013 Win64" ) generator="Visual Studio 12 2013 Win64"; break;;
+			        "NMake Makefiles" ) generator="NMake Makefiles"; break;;
+			        "NMake Makefiles JOM" ) generator="NMake Makefiles JOM"; break;;
+			        "Ninja" ) generator="Ninja"; break;;
+			    esac
+			done
+		elif [[ "$OSTYPE" = *"linux"* ]]; then
+			generator="Unix Makefiles"	# default generator for unix 
+		fi
 	fi
-
+else
+	generator=$2
 fi
+
 mkdir -p build
 cd build
 

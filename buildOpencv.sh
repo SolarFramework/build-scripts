@@ -1,13 +1,23 @@
-#!/bin/bash -e
-set -x
+#!/bin/bash
+#set -x
 myRepo=$(pwd)
 
+###### CONFIG
+
 echo "LET'S BUILD OPENCV"
-echo "Select Release"
+echo "Select Release (.e.g \"3.4.3\")"
 read OPENCVRELEASE
 
-echo "Select Generator"
+echo "FREE or NONFREE ?"
+read FREEORNONFREE
+if [ "$FREEORNONFREE" == "NONFREE" ]; then
+    CMAKE_OPTIONS="-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=OFF -DBUILD_opencv_hdf=OFF -DWITH_VTK=OFF -DWITH_CUDA:BOOL=OFF -DWITH_GSTREAMER=OFF -DBUILD_EXAMPLES:BOOL=OFF -DINSTALL_CREATE_DISTRIB=ON -DCMAKE_DEBUG_POSTFIX=  -DOPENCV_EXTRA_MODULES_PATH=$myRepo/opencv_contrib/modules -DOPENCV_ENABLE_NONFREE=ON -DBUILD_opencv_sfm=OFF -DWITH_EIGEN=OFF"
+else
+    CMAKE_OPTIONS="-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=OFF  -DBUILD_opencv_hdf=OFF -DWITH_VTK=OFF -DWITH_CUDA:BOOL=OFF -DWITH_GSTREAMER=OFF -DBUILD_EXAMPLES:BOOL=OFF -DINSTALL_CREATE_DISTRIB=ON -DCMAKE_DEBUG_POSTFIX="
+fi
+
 if [ "$OSTYPE" == "msys" ]; then
+    echo "Select Generator"
     options=("Visual Studio 15 2017 Win64" "Visual Studio 14 2015 Win64" "Visual Studio 12 2013 Win64" "NMake Makefiles" "NMake Makefiles JOM" "Ninja")
 
     select opt in "${options[@]}"; do
@@ -24,12 +34,15 @@ elif [[ "$OSTYPE" = *"linux"* ]]; then
     CMAKE_CONFIG_GENERATOR="Unix Makefiles"
 fi
 
+rm -rf Build Install
 mkdir -p Build
 mkdir -p Build/opencv
 mkdir -p Install
 mkdir -p Install/opencv
 mkdir -p Build/opencv_contrib
 
+
+###### CLONE GIT REPOSITORIES
 
 #CMAKE_CONFIG_GENERATOR="Visual Studio 14 2015 Win64"
 if [  ! -d "$myRepo/opencv"  ]; then
@@ -41,42 +54,46 @@ else
     git checkout $OPENCVRELEASE
     cd ..
 fi
-
+if [  ! -d "$myRepo/opencv_contrib"  ]; then
+    echo "cloning opencv_contrib"
+    git clone -b $OPENCVRELEASE  https://github.com/opencv/opencv_contrib.git
+else
+    cd opencv_contrib
+    git fetch
+    git checkout $OPENCVRELEASE
+    cd ..
+fi
 RepoSource=opencv
-pushd Build/$RepoSource
-CMAKE_OPTIONS='-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=OFF  -DWITH_CUDA:BOOL=OFF -DBUILD_EXAMPLES:BOOL=OFF -DINSTALL_CREATE_DISTRIB=ON -DCMAKE_DEBUG_POSTFIX='
-cmake -G"$CMAKE_CONFIG_GENERATOR" $CMAKE_OPTIONS -DCMAKE_INSTALL_PREFIX="$myRepo"/install/"$RepoSource" "$myRepo/$RepoSource"
-echo "************************* $Source_DIR -->debug"
-#cmake --build .  --config debug
-echo "************************* $Source_DIR -->release"
-#cmake --build .  --config release
-#cmake --build .  --target install --config release
-cmake --build .  --target install --config debug
-popd
 
-cd Install/opencv
-mkdir -p packaging
-cd packaging
-mkdir -p opencv
-cd opencv
-mkdir -p $OPENCVRELEASE
-cd $OPENCVRELEASE
-mkdir -p interfaces
-mkdir -p lib
-mkdir -p lib/x86_64
-mkdir -p lib/x86_64/shared
-mkdir -p lib/x86_64/shared/debug
-mkdir -p lib/x86_64/shared/release
-cd ../../../
-cp -r include/opencv* packaging/opencv/3.4.3/interfaces/
-if [ "$OSTYPE" == "msys" ]; then
-    cp x64/vc15/lib/opencv*.lib packaging/opencv/3.4.3/lib/x86_64/shared/release/
-    mv packaging/opencv/3.4.3/lib/x86_64/shared/release/*d.lib packaging/opencv/3.4.3/lib/x86_64/shared/debug/
-    cp x64/vc15/bin/opencv_*.dll packaging/opencv/3.4.3/lib/x86_64/shared/release/
-    mv packaging/opencv/3.4.3/lib/x86_64/shared/release/*d.dll packaging/opencv/3.4.3/lib/x86_64/shared/debug/
 
+
+echo "Build debug (y/N)?"
+read BUILDDEBUG
+if [ "$BUILDDEBUG" == "y" ]; then
+    ## DEBUG ################""
+    pushd Build/$RepoSource
+    #CMAKE_OPTIONS='-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=OFF -DWITH_VTK=OFF -DWITH_CUDA:BOOL=OFF WITH_GSTREAMER=OFF-DBUILD_EXAMPLES:BOOL=OFF -DINSTALL_CREATE_DISTRIB=ON -DCMAKE_DEBUG_POSTFIX='
+    cmake -G"$CMAKE_CONFIG_GENERATOR" $CMAKE_OPTIONS -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX="$myRepo"/install/"$RepoSource" "$myRepo/$RepoSource"
+    echo "************************* $Source_DIR -->debug"
+    cmake --build .  --config debug
+    cmake --build .  --target install --config debug
+    cmake --build .  --target clean
+    popd
+    mv install/opencv install/opencv-$FREEORNONFREE-debug
 fi
 
 
-
-
+echo "Build release (y/N)?"
+read BUILDRELEASE
+if [ "$BUILDRELEASE" == "y" ]; then
+    ## RELEASE ################""
+    pushd Build/$RepoSource
+    #CMAKE_OPTIONS='-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=OFF -DWITH_VTK=OFF -DWITH_CUDA:BOOL=OFF WITH_GSTREAMER=OFF-DBUILD_EXAMPLES:BOOL=OFF -DINSTALL_CREATE_DISTRIB=ON -DCMAKE_DEBUG_POSTFIX='
+    cmake -G"$CMAKE_CONFIG_GENERATOR" $CMAKE_OPTIONS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$myRepo"/install/"$RepoSource" "$myRepo/$RepoSource"
+    echo "************************* $Source_DIR -->release"
+    cmake --build .  --config release
+    cmake --build .  --target install --config release
+    cmake --build .  --target clean
+    popd
+    mv install/opencv install/opencv-$FREEORNONFREE-release
+fi
