@@ -5,8 +5,12 @@ myRepo=$(pwd)
 ###### CONFIG
 
 echo "LET'S BUILD OPENCV"
-echo "Select Release (.e.g \"3.4.3\")"
-read OPENCVRELEASE
+if [ $# -lt 1 ]; then
+	echo "Select Release (.e.g \"3.4.3\")"
+	read OPENCVRELEASE
+else
+	OPENCVRELEASE=$1 # first argument is git tag or commit id
+fi
 
 echo "FREE or NONFREE ?"
 read FREEORNONFREE
@@ -16,29 +20,31 @@ else
     CMAKE_OPTIONS="-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=OFF  -DBUILD_opencv_hdf=OFF -DWITH_VTK=OFF -DWITH_CUDA:BOOL=OFF -DWITH_GSTREAMER=OFF -DBUILD_EXAMPLES:BOOL=OFF -DINSTALL_CREATE_DISTRIB=ON -DCMAKE_DEBUG_POSTFIX="
 fi
 
-if [ "$OSTYPE" == "msys" ]; then
-    echo "Select Generator"
-    options=("Visual Studio 15 2017 Win64" "Visual Studio 14 2015 Win64" "Visual Studio 12 2013 Win64" "NMake Makefiles" "NMake Makefiles JOM" "Ninja")
+if [ $# -lt 2 ]; then
+	if [ "$OSTYPE" == "msys" ]; then
+	    echo "Select Generator"
+	    options=("Visual Studio 15 2017 Win64" "Visual Studio 14 2015 Win64" "Visual Studio 12 2013 Win64" "NMake Makefiles" "NMake Makefiles JOM" "Ninja")
 
-    select opt in "${options[@]}"; do
-        case $opt in
-            "Visual Studio 15 2017 Win64" ) CMAKE_CONFIG_GENERATOR="Visual Studio 15 2017 Win64"; break;;
-            "Visual Studio 14 2015 Win64" ) CMAKE_CONFIG_GENERATOR="Visual Studio 14 2015 Win64"; break;;
-            "Visual Studio 12 2013 Win64" ) CMAKE_CONFIG_GENERATOR="Visual Studio 12 2013 Win64"; break;;
-            "NMake Makefiles" ) CMAKE_CONFIG_GENERATOR="NMake Makefiles"; break;;
-            "NMake Makefiles JOM" ) CMAKE_CONFIG_GENERATOR="NMake Makefiles JOM"; break;;
-            "Ninja" ) CMAKE_CONFIG_GENERATOR="Ninja"; break;;
-        esac
-    done
-elif [[ "$OSTYPE" = *"linux"* ]]; then
-    CMAKE_CONFIG_GENERATOR="Unix Makefiles"
+	    select opt in "${options[@]}"; do
+	        case $opt in
+	            "Visual Studio 15 2017 Win64" ) CMAKE_CONFIG_GENERATOR="Visual Studio 15 2017 Win64"; break;;
+	            "Visual Studio 14 2015 Win64" ) CMAKE_CONFIG_GENERATOR="Visual Studio 14 2015 Win64"; break;;
+	            "Visual Studio 12 2013 Win64" ) CMAKE_CONFIG_GENERATOR="Visual Studio 12 2013 Win64"; break;;
+	            "NMake Makefiles" ) CMAKE_CONFIG_GENERATOR="NMake Makefiles"; break;;
+	            "NMake Makefiles JOM" ) CMAKE_CONFIG_GENERATOR="NMake Makefiles JOM"; break;;
+	            "Ninja" ) CMAKE_CONFIG_GENERATOR="Ninja"; break;;
+	        esac
+	    done
+	elif [[ "$OSTYPE" = *"linux"* ]]; then
+	    CMAKE_CONFIG_GENERATOR="Unix Makefiles"
+	fi
+else
+	CMAKE_CONFIG_GENERATOR=$2  # second argument as generator, e.g "Ninja"	
 fi
 
-rm -rf Build Install
+rm -rf Build
 mkdir -p Build
 mkdir -p Build/opencv
-mkdir -p Install
-mkdir -p Install/opencv
 mkdir -p Build/opencv_contrib
 
 
@@ -79,7 +85,7 @@ if [ "$BUILDDEBUG" == "y" ]; then
     cmake --build .  --target install --config debug
     cmake --build .  --target clean
     popd
-    mv install/opencv install/opencv-$FREEORNONFREE-debug
+    mv install/opencv install/opencv-$FREEORNONFREE-$OPENCVRELEASE-debug
 fi
 
 
@@ -95,5 +101,5 @@ if [ "$BUILDRELEASE" == "y" ]; then
     cmake --build .  --target install --config release
     cmake --build .  --target clean
     popd
-    mv install/opencv install/opencv-$FREEORNONFREE-release
+    mv install/opencv install/opencv-$FREEORNONFREE-$OPENCVRELEASE-release
 fi
