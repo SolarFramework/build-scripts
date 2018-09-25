@@ -61,10 +61,14 @@ case "$TARGET" in
 		cd ../../..
 		;;
 	"Sample-Slam")
-		cmake -H../../sources/Samples/Sample-Slam -B./Samples/Sample-Slam -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Samples/Sample-Slam
+		cmake -H../../sources/Samples/Sample-Slam/Mono -B./Samples/Sample-Slam/Mono -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam/Mono
 		cmake --build . --config $BUILDCONFIG
-		cd ../..
+		cd ../../..
+		cmake -H../../sources/Samples/Sample-Slam/Multi -B./Samples/Sample-Slam/Multi -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam/Multi
+		cmake --build . --config $BUILDCONFIG
+		cd ../../..		
 		;;
 	"Sample-Triangulation")
 		cmake -H../../sources/Samples/Sample-Triangulation -B./Samples/Sample-Triangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
