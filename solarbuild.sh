@@ -52,7 +52,7 @@ function makeRelease()
 if [ "$#" -ne 2 ]; then
   echo "Usage: build.sh <mode> <what to build>"
   echo "mode: debug or release"
-  echo what to build : "framework", "moduleopencv", "modulenonfreeopencv", "moduleopencvtests", "modulenonfreeopencvtests", "moduletools", "fiducialmarkersample", "naturalimagemarkersample", "triangulationsample", "xpcf", "unittests", "buildall"
+  echo what to build : "framework", "moduleopencv", "modulenonfreeopencv", "moduleopencvtests", "modulenonfreeopencvtests", "moduletools", "moduleopengl", "fiducialmarkersample", "naturalimagemarkersample", "triangulationsample", "slamsample", "xpcf", "unittests", "buildall"
   exit
 fi
 
