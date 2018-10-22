@@ -47,7 +47,14 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cmake --build . --config $BUILDCONFIG --target install	
 		cd ../..
-		;;		
+		;;
+	"SolARModuleFBOW")
+		cmake -H../../sources/Modules/SolARModuleFBOW -B./Modules/SolARModuleFBOW -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleFBOW
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install	
+		cd ../..
+		;;	
 	"NaturalImageMarker")
 		cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/NaturalImageMarker/Dynamic
@@ -205,6 +212,9 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleTools
 		buildTargets debug "$generator" SolARModuleTools
 
+		#buildTargets release "$generator" SolARModuleFBOW
+		#buildTargets debug "$generator" SolARModuleFBOW
+
 		buildTargets release "$generator" SolARModuleOpenGL		
 		buildTargets debug "$generator" SolARModuleOpenGL				
 
@@ -240,7 +250,7 @@ case "$TARGET" in
 	"list")
 		echo "Available targets:"
 		echo "(Framework) 		SolARFramework" 
-		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL"		
+		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL, SolARModuleFBOW"		
 		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
 		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
