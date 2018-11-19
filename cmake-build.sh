@@ -212,8 +212,8 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleTools
 		buildTargets debug "$generator" SolARModuleTools
 
-		#buildTargets release "$generator" SolARModuleFBOW
-		#buildTargets debug "$generator" SolARModuleFBOW
+		buildTargets release "$generator" SolARModuleFBOW
+		buildTargets debug "$generator" SolARModuleFBOW
 
 		buildTargets release "$generator" SolARModuleOpenGL		
 		buildTargets debug "$generator" SolARModuleOpenGL				
