@@ -27,7 +27,7 @@ create a source/ directory, and will clone all sources/ into that directory.
 Finally sources will be built and installed.
 
 
-== fromscratch-nonfree-cmake.sh (optionnal)
+== fromscratch-nonfree-cmake.sh (optional)
 
 This command is similar to fromscratch-cmake.sh. The only difference is that it allows the download of non free dependencies
 (e.g non free libs that are part of opencv-contrib libraries). Some non free libraries and non free samples will also be built and installed.
