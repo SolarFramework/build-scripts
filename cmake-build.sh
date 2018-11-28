@@ -276,7 +276,7 @@ case "$TARGET" in
 		;;
 	*)
 		buildTargets release "$generator" $TARGET
-		#buildTargets debug "$generator" $TARGET
+		buildTargets debug "$generator" $TARGET
 		;;
 esac
 
