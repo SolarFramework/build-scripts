@@ -25,9 +25,11 @@ modules=`find sources/Modules -maxdepth 1 -type d -name "SolAR*"`
 for module in $modules
 do
 	cd $module
-	updateGit $1
-	cd $CURRENTDIR
-	echo ""
+	if [ -d .git ]; then
+		updateGit $1
+		echo ""
+	fi
+	cd $CURRENTDIR	
 done
 
 
@@ -36,12 +38,48 @@ samples=`find sources/Samples/ -mindepth 1 -maxdepth 1 -type d`
 for sample in $samples
 do
 	cd $sample
-	updateGit $1
+	if [ -d .git ]; then
+		updateGit $1
+		echo ""
+	fi
 	cd $CURRENTDIR
-	echo ""
 done
 
 # Unit Tests
 cd sources/SolARTests
 updateGit $1
+cd $CURRENTDIR
+
+# Summary to be sure everything is OK
+echo ""
+echo "### GIT REPOSITORIES AND THEIR CURRENT BRANCH:"
+
+cd sources/SolARFramework
+branch=`git rev-parse --abbrev-ref HEAD`
+echo "Repository: sources/SolARFramework is on branch $branch"
+cd $CURRENTDIR
+
+for module in $modules
+do
+	cd $module
+	if [ -d .git ]; then
+		branch=`git rev-parse --abbrev-ref HEAD`
+		echo "Repository: $module is on branch $branch"
+	fi
+	cd $CURRENTDIR
+done
+
+for sample in $samples
+do
+	cd $sample
+	if [ -d .git ]; then
+		branch=`git rev-parse --abbrev-ref HEAD`
+		echo "Repository: $sample is on branch $branch"
+	fi
+	cd $CURRENTDIR
+done
+
+cd sources/SolARTests
+branch=`git rev-parse --abbrev-ref HEAD`
+echo "Repository: sources/SolARTests is on branch $branch"
 cd $CURRENTDIR

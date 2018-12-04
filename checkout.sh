@@ -15,13 +15,12 @@ echo ""
 echo "REPOSITORY: $repo_name"
 current_branch=`git rev-parse --abbrev-ref HEAD`
 echo "CURRENT BRANCH: $current_branch"
-echo
+
 
 branches=`git branch -r --sort=refname | grep -v HEAD` 
 branches=${branches//\*/}
 branches=${branches//origin\//}
 
-echo "SELECT BRANCH TO CHECKOUT"
 if [ $# -eq 2 ]; then
   if [[ $branches = *"$2"* ]]; then
     git checkout $2
@@ -31,6 +30,7 @@ if [ $# -eq 2 ]; then
   fi
 fi
 
+echo "SELECT BRANCH TO CHECKOUT"
 select branch in $branches;
 do
 git checkout $branch
