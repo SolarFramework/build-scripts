@@ -7,4 +7,4 @@ set VSVARPATH=%VS150COMNTOOLS:~0,-15%\VC\Auxiliary\Build
 set VSVERSION=msvc2017
 IF "%~1" EQU "" (call "%VSVARPATH%\vcvarsall.bat" amd64) else (call "%VSVARPATH%\vcvarsall.bat" amd64 -vcvars_ver=%VCVERSION%)
 cd "%CURRENTDIR%\.."
-"C:\Program Files\Git\git-bash.exe"
+"C:\My Program Files\cmder\vendor\git-for-windows\git-bash.exe"

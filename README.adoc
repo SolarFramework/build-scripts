@@ -1,11 +1,170 @@
-= Build tools
+= build scripts for windows & linux
 
-== solarshell_VS2015.bat and solarshell_VS2017.bat
+== INIT
 
-Windows users: use these scripts to launch a shell console where you will be able
-to compile source code, using the commands described below.
+You should first install cmake, and check the addition of cmake to your path.
+https://cmake.org/download/
 
-== fromscratch.sh
+Please use first fromscratch-cmake.sh to download the entire SolAR framework (nonfree excepted ), and then select the branch you want to work on.
 
-Usage: build-scripts/fromscratch.sh
-This script builds and install SolAR framework and modules from scratch.
+NOTE: please note that the updateGit.sh will select the required branch for every GIT repository where the specified branch exists.
+
+$ ./build-scripts/fromscratch-cmake.sh
+
+$ ./build-scripts/updateGit.sh develop
+
+
+== fromscratch-cmake.sh
+
+In a directory that only contains build-scripts/ folder, you may launch:
+
+[source, shell]
+
+	$ ./build-scripts/fromscratch-cmake.sh
+
+This command will first get all dependencies (third parties libraries) for you. Then it will
+create a source/ directory, and will clone all sources/ into that directory.
+Finally sources will be built and installed.
+
+
+== fromscratch-nonfree-cmake.sh (optional)
+
+This command is similar to fromscratch-cmake.sh. The only difference is that it allows the download of non free dependencies
+(e.g non free libs that are part of opencv-contrib libraries). Some non free libraries and non free samples will also be built and installed.
+
+
+== checkout.sh
+
+This script is used to position a switch a specific git repository to a desired branch.
+Two usages are possible:
+
+=== Interactive mode
+
+This mode will display the list of all possible branches to switch to,
+and will let the user enter the number of desired branch.
+Example:
+
+[source,shell]
+
+	$ ./build-scripts/checkout.sh sources/SolARFramework
+	REPOSITORY: SolARFramework
+	CURRENT BRANCH: feature/xpcf_v2
+
+	SELECT BRANCH TO CHECKOUT
+	1) calib_with_file               8) feature/transform3d
+	2) develop                       9) feature/xpcf_v2
+	3) feature/KP_AKAZE2            10) feature_TransformClass
+	4) feature/cmake                11) master
+	5) feature/non_free_VS_Update   12) readmeSolARframework
+	6) feature/pose_helper          13) splitOpencv
+	7) feature/slam                 14) triangulation
+	#? 2
+	Switched to branch 'develop'
+	Your branch is behind 'origin/develop' by 2 commits, and can be fast-forwarded.
+	  (use "git pull" to update your local branch)
+
+
+
+
+=== Non interactive mode
+
+In this mode user will pass the desired branch name as a parameter. Example:
+
+[source,shell]
+	$ ./build-scripts/checkout.sh sources/SolARFramework feature/xpcf_v2
+
+	REPOSITORY: SolARFramework
+	CURRENT BRANCH: develop
+
+	SELECT BRANCH TO CHECKOUT
+	Switched to branch 'feature/xpcf_v2'
+	Your branch is up to date with 'origin/feature/xpcf_v2'.
+
+
+
+== updateGit.sh
+
+This script will update all your SolAR git repositories, and will allow the user to switch to desired branches.
+In order to be used, the sources and scripts must be organized as follows:
+
+[source, shell]
+	$ ls -l
+	drwxr-xr-x 		build-scripts/
+	drwxr-xr-x 		sources/
+
+[source, shell]
+	$ ls -l sources/
+	drwxr-xr-x 		SolARFramework/
+	drwxr-xr-x 		Modules/
+	drwxr-xr-x 		Samples/
+
+
+=== Interactive mode
+
+[sources, shell]
+	$ ./build-scripts/updateGit.sh
+
+In this mode, the script "checkout.sh" will be called for those repositories: sources/SolARFramework, sources/Modules/SolAR* (ex: SolARModuleOpenCV) and all repositories
+under sources/Samples folder.
+
+=== Non interactive mode
+
+[sources, shell]
+
+This mode will allow a user to pass a desired branch name (that has to be common to all repositories)
+Example:
+
+[sources, shell]
+
+	$ ./build-scripts/updateGit.sh develop
+
+This command will switch sources/SolARFramework, sources/Modules/SolAR* (ex: SolARModuleOpenCV) and all repositories
+under sources/Samples folder to "develop" branch.
+
+
+Note that in all cases repositories will be updated based on latest commits on github. Errors may occur if local changes
+have not been commited or stashed.
+
+
+== cmake-build.sh
+
+Usage:
+build-scripts/cmake-build.sh [target to build]
+ex : build-scripts/cmake-build.sh SolARFramework
+ex : build-scripts/cmake-build.sh all (to build all targets)
+ex : build-scripts/cmake-build.sh clean (to delete build folder)
+ex : build-scripts/cmake-build.sh list (to list all targets)
+
+
+=== ./build-scripts/cmake-build.sh list
+
+This command will list all the possible targets that the script can build.
+Example :
+
+[source, shell]
+
+	$ ./build-scripts/cmake-build.sh list
+	Available targets:
+	SolARFramework, SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, NaturalImageMarker, FiducialMarker
+
+=== ./build-scripts/cmake-build.sh clean
+
+This command will delete te build directory (containing all cmake cache files,  built libraries, and executables).
+
+=== /build-scripts/cmake-build.sh [target]
+
+This command will build a specific target. Example :
+
+[source, shell]
+
+	$ build-scripts/cmake-build.sh SolARFramework
+
+If build/ directory doesn't exist, it  will be created. Then a release/ and debug/ directory will be created, and SolARFramework
+will be built and installed in these two modes.
+
+
+=== ./build-scripts/cmake-build.sh all
+
+This command will build and install all targets listed in "./build-scripts/cmake-build.sh list" output.
+
+
