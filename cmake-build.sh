@@ -234,6 +234,12 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARImageLoader
 		buildTargets debug "$generator" SolARImageLoader
 
+		
+		buildTargets release "$generator" Sample-Triangulation
+		buildTargets debug "$generator" Sample-Triangulation
+
+		buildTargets release "$generator" Sample-Slam
+		buildTargets debug "$generator" Sample-Slam	
 		#buildTargets release "$generator" SolARSVDtriangulation
 		# unit tests
 		#buildTargets release "$generator" UnitTests
@@ -262,12 +268,6 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARDescriptorExtractorNonFree
 		#buildTargets release "$generator" SolARDescriptorMatcherNonFree
 		#buildTargets release "$generator" SolARHomographyEstimationNonFree
-
-		buildTargets release "$generator" Sample-Triangulation
-		buildTargets debug "$generator" Sample-Triangulation
-
-		buildTargets release "$generator" Sample-Slam
-		buildTargets debug "$generator" Sample-Slam	
 
 		# tests "non free"
 		buildTargets debug "$generator" SolARDescriptorExtractorNonFree
