@@ -54,7 +54,35 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cmake --build . --config $BUILDCONFIG --target install	
 		cd ../..
-		;;	
+		;;
+	"SolARModuleCeres")
+		cmake -H../../sources/Modules/SolARModuleCeres -B./Modules/SolARModuleCeres -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleCeres
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install	
+		cd ../..
+		;;
+	"SolARModuleOpenGL")
+		cmake -H../../sources/Modules/SolARModuleOpenGL -B./Modules/SolARModuleOpenGL -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenGL
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install	
+		cd ../..
+		;;
+	"SolARPipelineManager")
+		cmake -H../../sources/Modules/SolARPipelineManager -B./Modules/SolARPipelineManager -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARPipelineManager
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install	
+		cd ../..
+		;;
+	"SolARUnityPlugin")
+		cmake -H../../sources/Modules/SolARUnityPlugin -B./Modules/SolARUnityPlugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARUnityPlugin
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install	
+		cd ../..
+		;;		
 	"NaturalImageMarker")
 		cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/NaturalImageMarker/Dynamic
@@ -62,8 +90,8 @@ case "$TARGET" in
 		cd ../../..
 		;;
 	"FiducialMarker")
-		cmake -H../../sources/Samples/FiducialMarker/Dynamic -B./Samples/FiducialMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Samples/FiducialMarker/Dynamic
+		cmake -H../../sources/Samples/FiducialMarker/StandAlone -B./Samples/FiducialMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
@@ -218,6 +246,18 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleOpenGL		
 		buildTargets debug "$generator" SolARModuleOpenGL				
 
+		buildTargets release "$generator" SolARModuleOpenGV	
+		buildTargets debug "$generator" SolARModuleOpenGV
+
+		buildTargets release "$generator" SolARModuleCeres		
+		buildTargets debug "$generator" SolARModuleCeres	
+
+		buildTargets release "$generator" SolARPipelineManager	
+		buildTargets debug "$generator" SolARPipelineManager					
+
+		buildTargets release "$generator" SolARUnityPlugin
+		buildTargets debug "$generator" SolARUnityPlugin		
+
 		buildTargets release "$generator" NaturalImageMarker
 		buildTargets debug "$generator" NaturalImageMarker
 
@@ -250,7 +290,7 @@ case "$TARGET" in
 	"list")
 		echo "Available targets:"
 		echo "(Framework) 		SolARFramework" 
-		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL, SolARModuleFBOW"		
+		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL, SolARModuleFBOW, SolARModuleCeres, SolARModuleOpenGV, SolARPipelineManager, SolARUnityPlugin"		
 		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
 		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
