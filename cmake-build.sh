@@ -63,7 +63,7 @@ case "$TARGET" in
 		cd ../..
 		;;
 	"SolARModuleOpenGV")
-		cmake -H../../sources/Modules/SolARModuleOpenGV -B./Modules/SolARModuleOpenGL -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cmake -H../../sources/Modules/SolARModuleOpenGV -B./Modules/SolARModuleOpenGV -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenGV
 		cmake --build . --config $BUILDCONFIG
 		cmake --build . --config $BUILDCONFIG --target install	
