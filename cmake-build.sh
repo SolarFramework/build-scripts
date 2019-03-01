@@ -252,11 +252,11 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleCeres		
 		buildTargets debug "$generator" SolARModuleCeres	
 
-		buildTargets release "$generator" SolARPipelineManager	
-		buildTargets debug "$generator" SolARPipelineManager					
+		#buildTargets release "$generator" SolARPipelineManager	
+		#buildTargets debug "$generator" SolARPipelineManager					
 
-		buildTargets release "$generator" SolARUnityPlugin
-		buildTargets debug "$generator" SolARUnityPlugin		
+		#buildTargets release "$generator" SolARUnityPlugin
+		#buildTargets debug "$generator" SolARUnityPlugin		
 
 		buildTargets release "$generator" NaturalImageMarker
 		buildTargets debug "$generator" NaturalImageMarker
