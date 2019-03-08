@@ -176,7 +176,13 @@ case "$TARGET" in
 		cd Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
-		;;		
+		;;
+	"SolARModuleCeresTest")
+		cmake -H../../sources/Modules/SolARModuleCeres/tests -B./Modules/SolARModuleCeres/tests -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleCeres/tests
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../
+		;;				
 	"UnitTests")
 		cmake -H../../sources/SolARTests/unittests/ModuleLoading -B./SolARTests/unittests/ModuleLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd SolARTests/unittests/ModuleLoading
@@ -303,7 +309,7 @@ case "$TARGET" in
 		echo "Available targets:"
 		echo "(Framework) 		SolARFramework" 
 		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL, SolARModuleFBOW, SolARModuleCeres, SolARModuleOpenGV, SolARPipelineManager, SolARUnityPlugin"		
-		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation, SolARTestModuleOpenGVPnP, SolARTriangulationOpenGVTest"
+		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation, SolARTestModuleOpenGVPnP, SolARTriangulationOpenGVTest, SolARModuleCeresTest"
 		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
 		;;
