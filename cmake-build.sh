@@ -84,8 +84,8 @@ case "$TARGET" in
 		cd ../..
 		;;		
 	"NaturalImageMarker")
-		cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Samples/NaturalImageMarker/Dynamic
+		cmake -H../../sources/Samples/NaturalImageMarker/StandAlone -B./Samples/NaturalImageMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
