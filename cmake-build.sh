@@ -172,8 +172,8 @@ case "$TARGET" in
 		cd ../../../../
 		;;
 	"SolARTriangulationOpenGVTest")
-		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTriangulationOpenGVTest -B./Modules/SolARModuleOpenGV/tests/SolARTriangulationOpenGVTest -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Modules/SolARModuleOpenGV/tests/SolARTriangulationOpenGVTest
+		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -B./Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
 		;;		
