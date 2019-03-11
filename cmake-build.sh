@@ -172,16 +172,20 @@ case "$TARGET" in
 		cd ../../../../
 		;;
 	"SolARTriangulationOpenGVTest")
+		echo "###INFO####"
+		echo `pwd`
 		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -B./Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation
 		cmake --build . --config $BUILDCONFIG
-		cd ../../../../../
+		cd ../../../../
+		echo "###INFO####"
+		echo `pwd`
 		;;
 	"SolARModuleCeresTest")
 		cmake -H../../sources/Modules/SolARModuleCeres/tests -B./Modules/SolARModuleCeres/tests -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleCeres/tests
 		cmake --build . --config $BUILDCONFIG
-		cd ../../../../
+		cd ../../../
 		;;				
 	"UnitTests")
 		cmake -H../../sources/SolARTests/unittests/ModuleLoading -B./SolARTests/unittests/ModuleLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
