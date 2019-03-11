@@ -182,7 +182,25 @@ case "$TARGET" in
 		cd Modules/SolARModuleCeres/tests
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../
-		;;				
+		;;
+	"PipelineFiducialMarker")
+		cmake -H../../sources/Samples/FiducialMarker/Plugin -B./Samples/FiducialMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../
+		;;
+	"PipelineNaturalImageMarker")
+		cmake -H../../sources/Samples/NaturalImageMarker/Plugin -B./Samples/NaturalImageMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../
+		;;
+	"PipeLineSlam")
+		cmake -H../../sources/Samples/Sample-Slam/Plugin -B./Samples/Sample-Slam/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../
+		;;					
 	"UnitTests")
 		cmake -H../../sources/SolARTests/unittests/ModuleLoading -B./SolARTests/unittests/ModuleLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd SolARTests/unittests/ModuleLoading
@@ -310,7 +328,7 @@ case "$TARGET" in
 		echo "(Framework) 		SolARFramework" 
 		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL, SolARModuleFBOW, SolARModuleCeres, SolARModuleOpenGV, SolARPipelineManager, SolARUnityPlugin"		
 		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation, SolARTestModuleOpenGVPnP, SolARTriangulationOpenGVTest, SolARModuleCeresTest"
-		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
+		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, PipelineFiducialMarker, PipelineNaturalImageMarker, PipeLineSlam, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
 		;;
 	"nonfree")
