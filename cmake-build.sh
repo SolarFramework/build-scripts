@@ -119,6 +119,12 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../
 		;;
+	"SolAROpticalFlow")
+		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -B./Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenCV/tests/SolAROpticalFlow
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../../
+		;;
 	"SolARDescriptorExtractorNonFree")
 		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor
@@ -136,6 +142,18 @@ case "$TARGET" in
 		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARHomographyEstimation/static
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
+		;;
+	"SolARTestModuleOpenGVPnP"
+		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVPnP -B./Modules/SolARModuleOpenGV/tests/SolARModuleOpenGV -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenGV/tests/SolARModuleOpenGV
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../
+		;;
+	"SolARTestModuleOpenGVTriangulation"
+		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -B./Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../
 		;;
 	"UnitTests")
 		cmake -H../../sources/SolARTests/unittests/ModuleLoading -B./SolARTests/unittests/ModuleLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
@@ -233,7 +251,8 @@ case "$TARGET" in
 		buildTargets debug "$generator" SolARImageConvertor
 		buildTargets release "$generator" SolARImageLoader
 		buildTargets debug "$generator" SolARImageLoader
-
+		buildTargets release "$generator" SolAROpticalFlow
+		buildTargets debug "$generator" SolAROpticalFlow
 		
 		buildTargets release "$generator" Sample-Triangulation
 		buildTargets debug "$generator" Sample-Triangulation
@@ -257,7 +276,7 @@ case "$TARGET" in
 		echo "Available targets:"
 		echo "(Framework) 		SolARFramework" 
 		echo "(Modules) 		SolARModuleOpenCV, SolARModuleNonFreeOpenCV, SolARModuleTools, SolARModuleOpenGL, SolARModuleFBOW"		
-		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolARSVDtriangulation"
+		echo "(Simple Samples)	SolARCameraCalibration, SolARDescriptorMatcher, SolARImageConvertor, SolARImageLoader, SolAROpticalFlow, SolARSVDtriangulation"
 		echo "(RA Samples)		NaturalImageMarker, FiducialMarker, Sample-Slam, Sample-Triangulation"
 		echo "(Unit Tests)		UnitTests"
 		;;
@@ -274,6 +293,18 @@ case "$TARGET" in
 		#buildTargets debug "$generator" SolARDescriptorMatcherNonFree
 		#buildTargets debug "$generator" SolARHomographyEstimationNonFree		
 		;;
+		
+	"opengv"
+		buildTargets release "$generator" SolARModuleOpenGV
+		buildTargets debug "$generator" SolARModuleOpenGV
+		
+		#tests "opengv"
+		buildTargets release "$generator" SolARTestModuleOpenGVPnP
+		buildTargets debug "$generator" SolARTestModuleOpenGVPnP
+		
+		buildTargets release "$generator" SolARTestModuleOpenGVTriangulation
+		buildTargets debug "$generator" SolARTestModuleOpenGVTriangulation
+		
 	*)
 		buildTargets release "$generator" $TARGET
 		buildTargets debug "$generator" $TARGET
