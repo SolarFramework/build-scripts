@@ -56,14 +56,22 @@ case "$TARGET" in
 		cd ../..
 		;;	
 	"NaturalImageMarker")
-		cmake -H../../sources/Samples/NaturalImageMarker/Dynamic -B./Samples/NaturalImageMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Samples/NaturalImageMarker/Dynamic
+		cmake -H../../sources/Samples/NaturalImageMarker/Plugin -B./Samples/NaturalImageMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cd ../../..
+		cmake -H../../sources/Samples/NaturalImageMarker/StandAlone -B./Samples/NaturalImageMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
 	"FiducialMarker")
-		cmake -H../../sources/Samples/FiducialMarker/Dynamic -B./Samples/FiducialMarker/Dynamic -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd Samples/FiducialMarker/Dynamic
+		cmake -H../../sources/Samples/FiducialMarker/Plugin -B./Samples/FiducialMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cd ../../..
+		cmake -H../../sources/Samples/FiducialMarker/StandAlone -B./Samples/FiducialMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
@@ -143,13 +151,13 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../../
 		;;
-	"SolARTestModuleOpenGVPnP"
+	"SolARTestModuleOpenGVPnP")
 		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVPnP -B./Modules/SolARModuleOpenGV/tests/SolARModuleOpenGV -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenGV/tests/SolARModuleOpenGV
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../
 		;;
-	"SolARTestModuleOpenGVTriangulation"
+	"SolARTestModuleOpenGVTriangulation")
 		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -B./Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation
 		cmake --build . --config $BUILDCONFIG
@@ -294,7 +302,7 @@ case "$TARGET" in
 		#buildTargets debug "$generator" SolARHomographyEstimationNonFree		
 		;;
 		
-	"opengv"
+	"opengv")
 		buildTargets release "$generator" SolARModuleOpenGV
 		buildTargets debug "$generator" SolARModuleOpenGV
 		
@@ -304,7 +312,7 @@ case "$TARGET" in
 		
 		buildTargets release "$generator" SolARTestModuleOpenGVTriangulation
 		buildTargets debug "$generator" SolARTestModuleOpenGVTriangulation
-		
+		;;
 	*)
 		buildTargets release "$generator" $TARGET
 		buildTargets debug "$generator" $TARGET
