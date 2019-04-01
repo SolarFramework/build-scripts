@@ -20,7 +20,6 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG --target install
 		cd ..
 		;;
-case "$TARGET" in
 	"SolARWrapper")
 		cmake -H../../sources/SolARFramework/SolARWrapper -B./SolARWrapper -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd SolARWrapper
