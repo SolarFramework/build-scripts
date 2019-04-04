@@ -135,7 +135,7 @@ case "$TARGET" in
 		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -B./Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenCV/tests/SolAROpticalFlow
 		cmake --build . --config $BUILDCONFIG
-		cd ../../../../../
+		cd ../../../../
 		;;
 	"SolARDescriptorExtractorNonFree")
 		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
