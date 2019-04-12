@@ -7,8 +7,9 @@ if [ $# -lt 1 ]; then
   exit -1
 fi
 
-VERSIONSFILE=$1
-WITHWARNING=0
+VERSIONSFILE=$1		# input file : versions.txt
+WITHWARNING=0		# 1 to print warnings
+DONOTHING=0			# 1 to display current versions only
 
 # read required versions
 declare -A ARRAYVER
@@ -53,36 +54,41 @@ function updateVersion()
 				echo "$project is in version $version"
 
 				# CHANGE VERSION NUMBER HERE - interactive mode if versions.txt does not contain version number for component
-				if [[ ${ARRAYVER[$project]} == "" ]]; then
-					echo "enter new version:"
-					read newversion
-				else
-					newversion=${ARRAYVER[$project]}		
-					echo ">>>> Changing $project version number to $newversion"
-				fi
+				if [[ $DONOTHING == "0" ]]; then
 
-				# change in CMakeLists.txt
-				sed -i -e "s/VERSION_NUMBER\s\"[0-9]\.[0-9]\.[0-9]\"/VERSION_NUMBER \"$newversion\"/g" CMakeLists.txt > /dev/null
 
-				# change in .pc.in
-				sed -i -e "s/Version: [0-9]\.[0-9]\.[0-9]/Version: $newversion/g" *.pc.in > /dev/null 
-				
-				# change in .pro
-				sed -i -e "s/VERSION=[0-9]\.[0-9]\.[0-9]/VERSION=$newversion/g" *.pro > /dev/null
+					if [[ ${ARRAYVER[$project]} == "" ]]; then
+						echo "enter new version:"
+						read newversion
+					else
+						newversion=${ARRAYVER[$project]}		
+						echo ">>>> Changing $project version number to $newversion"
+					fi
 
-				# change in all .xml
-				xmlfiles=`find $SOURCEDIR -name "*.xml"`
-				for xmlfile in $xmlfiles
-				do
-					sed -i -e "s/$project\/[0-9]\.[0-9]\.[0-9]/$project\/$newversion/g" $xmlfile
-				done
+					# change in CMakeLists.txt
+					sed -i -e "s/VERSION_NUMBER\s\"[0-9]\.[0-9]\.[0-9]\"/VERSION_NUMBER \"$newversion\"/g" CMakeLists.txt > /dev/null
 
-				# change packagedependencies.txt in other repositories
-				packagedepfiles=`find $SOURCEDIR -name "packagedependencies.txt"`
-				for packagedepfile in $packagedepfiles
-				do
-					sed -i -e "s/$project|[0-9]\.[0-9]\.[0-9]/$project|$newversion/g" $packagedepfile
-				done				
+					# change in .pc.in
+					sed -i -e "s/Version: [0-9]\.[0-9]\.[0-9]/Version: $newversion/g" *.pc.in > /dev/null 
+					
+					# change in .pro
+					sed -i -e "s/VERSION=[0-9]\.[0-9]\.[0-9]/VERSION=$newversion/g" *.pro > /dev/null
+
+					# change in all .xml
+					xmlfiles=`find $SOURCEDIR -name "*.xml"`
+					for xmlfile in $xmlfiles
+					do
+						sed -i -e "s/$project\/[0-9]\.[0-9]\.[0-9]/$project\/$newversion/g" $xmlfile
+					done
+
+					# change packagedependencies.txt in other repositories
+					packagedepfiles=`find $SOURCEDIR -name "packagedependencies.txt"`
+					for packagedepfile in $packagedepfiles
+					do
+						sed -i -e "s/$project|[0-9]\.[0-9]\.[0-9]/$project|$newversion/g" $packagedepfile
+					done
+
+				fi		
 				# 
 				####
 
@@ -133,12 +139,15 @@ cd $SOURCEDIR
 
 
 # ultimate change of all packagedependencies.txt
-for comp in "${!ARRAYVER[@]}"
-do
-	vers=${ARRAYVER[$comp]}
-	packagedepfiles=`find $SOURCEDIR -name "packagedependencies.txt"`
-	for packagedepfile in $packagedepfiles
+if [[ $DONOTHING == "0" ]]; then
+
+	for comp in "${!ARRAYVER[@]}"
 	do
-		sed -i -e "s/$comp|[0-9]\.[0-9]\.[0-9]/$comp|$vers/g" $packagedepfile
-	done				
-done
+		vers=${ARRAYVER[$comp]}
+		packagedepfiles=`find $SOURCEDIR -name "packagedependencies.txt"`
+		for packagedepfile in $packagedepfiles
+		do
+			sed -i -e "s/$comp|[0-9]\.[0-9]\.[0-9]/$comp|$vers/g" $packagedepfile
+		done				
+	done
+fi
