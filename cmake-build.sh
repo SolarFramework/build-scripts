@@ -20,13 +20,6 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG --target install
 		cd ..
 		;;
-	"SolARWrapper")
-		cmake -H../../sources/SolARFramework/SolARWrapper -B./SolARWrapper -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd SolARWrapper
-		cmake --build . --config $BUILDCONFIG
-		#cmake --build . --config $BUILDCONFIG --target install
-		cd ../..
-		;;
 	"SolARModuleOpenCV")
 		cmake -H../../sources/Modules/SolARModuleOpenCV -B./Modules/SolARModuleOpenCV -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenCV
@@ -142,7 +135,7 @@ case "$TARGET" in
 		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -B./Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenCV/tests/SolAROpticalFlow
 		cmake --build . --config $BUILDCONFIG
-		cd ../../../../../
+		cd ../../../../
 		;;
 	"SolARDescriptorExtractorNonFree")
 		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
