@@ -87,7 +87,12 @@ case "$TARGET" in
 		cmake -H../../sources/Samples/Sample-Slam/Plugin -B./Samples/Sample-Slam/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/Sample-Slam/Plugin
 		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install
 		cd ../../..
+		cmake -H../../sources/Samples/Sample-Slam/Plugin/tests/TestSlamPipeline -B./Samples/Sample-Slam/Plugin/tests/TestSlamPipeline -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam/Plugin/tests/TestSlamPipeline
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../..
 		;;
 	"Sample-Triangulation")
 		cmake -H../../sources/Samples/Sample-Triangulation -B./Samples/Sample-Triangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
