@@ -11,7 +11,11 @@ VERSIONSFILE=$1		# input file : versions.txt
 WITHWARNING=0		# 1 to print warnings
 DONOTHING=0			# 1 to display current versions only
 
-# read required versions
+SOURCEDIR=`pwd`
+export PATH=$SOURCEDIR/build-scripts/:$PATH
+
+
+# read required versions and store them in associative array
 declare -A ARRAYVER
 
 while read line; do
@@ -60,6 +64,7 @@ function updateVersion()
 					if [[ ${ARRAYVER[$project]} == "" ]]; then
 						echo "enter new version:"
 						read newversion
+						ARRAYVER[$project]=$newversion
 					else
 						newversion=${ARRAYVER[$project]}		
 						echo ">>>> Changing $project version number to $newversion"
@@ -99,10 +104,6 @@ function updateVersion()
 		cd $processedDir
 	done
 }
-
-
-SOURCEDIR=`pwd`
-export PATH=$SOURCEDIR/build-scripts/:$PATH
 
 # SolARFramework
 cd sources/SolARFramework
