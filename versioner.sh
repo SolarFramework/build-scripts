@@ -68,8 +68,10 @@ function updateVersion()
 					# change in CMakeLists.txt
 					sed -i -e "s/VERSION_NUMBER\s\"[0-9]\.[0-9]\.[0-9]\"/VERSION_NUMBER \"$newversion\"/g" CMakeLists.txt > /dev/null
 
-					# change in .pc.in
-					sed -i -e "s/Version: [0-9]\.[0-9]\.[0-9]/Version: $newversion/g" *.pc.in > /dev/null 
+					# change in .pc.in if exists
+					for pcin in ./*.pc.in; do
+						[ -e "$pcin" ] && sed -i -e "s/Version: [0-]\.[0-9]\.[0-9]/Version: $newversion/g" $pcin
+					done
 					
 					# change in .pro
 					sed -i -e "s/VERSION=[0-9]\.[0-9]\.[0-9]/VERSION=$newversion/g" *.pro > /dev/null
