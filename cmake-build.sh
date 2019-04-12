@@ -84,12 +84,20 @@ case "$TARGET" in
 		cd ../..
 		;;		
 	"NaturalImageMarker")
+		cmake -H../../sources/Samples/NaturalImageMarker/Plugin -B./Samples/NaturalImageMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cd ../../..
 		cmake -H../../sources/Samples/NaturalImageMarker/StandAlone -B./Samples/NaturalImageMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/NaturalImageMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
 		;;
 	"FiducialMarker")
+		cmake -H../../sources/Samples/FiducialMarker/Plugin -B./Samples/FiducialMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cd ../../..
 		cmake -H../../sources/Samples/FiducialMarker/StandAlone -B./Samples/FiducialMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/FiducialMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
@@ -103,7 +111,16 @@ case "$TARGET" in
 		cmake -H../../sources/Samples/Sample-Slam/Multi -B./Samples/Sample-Slam/Multi -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/Sample-Slam/Multi
 		cmake --build . --config $BUILDCONFIG
-		cd ../../..		
+		cd ../../..
+		cmake -H../../sources/Samples/Sample-Slam/Plugin -B./Samples/Sample-Slam/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install
+		cd ../../..
+		cmake -H../../sources/Samples/Sample-Slam/Plugin/tests/TestSlamPipeline -B./Samples/Sample-Slam/Plugin/tests/TestSlamPipeline -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam/Plugin/tests/TestSlamPipeline
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../..
 		;;
 	"Sample-Triangulation")
 		cmake -H../../sources/Samples/Sample-Triangulation -B./Samples/Sample-Triangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
@@ -147,6 +164,12 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../../
 		;;
+	"SolAROpticalFlow")
+		cmake -H../../sources/Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -B./Modules/SolARModuleOpenCV/tests/SolAROpticalFlow -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenCV/tests/SolAROpticalFlow
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../
+		;;
 	"SolARDescriptorExtractorNonFree")
 		cmake -H../../sources/Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -B./Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleNonFreeOpenCV/tests/SolARDescriptorExtractor
@@ -172,6 +195,12 @@ case "$TARGET" in
 		cd ../../../../
 		;;
 	"SolARTriangulationOpenGVTest")
+		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVPnP -B./Modules/SolARModuleOpenGV/tests/SolARModuleOpenGV -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Modules/SolARModuleOpenGV/tests/SolARModuleOpenGV
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../
+		;;
+	"SolARTestModuleOpenGVTriangulation")
 		cmake -H../../sources/Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -B./Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Modules/SolARModuleOpenGV/tests/SolARTestModuleOpenGVTriangulation
 		cmake --build . --config $BUILDCONFIG
@@ -309,7 +338,14 @@ case "$TARGET" in
 		buildTargets debug "$generator" SolARImageConvertor
 		buildTargets release "$generator" SolARImageLoader
 		buildTargets debug "$generator" SolARImageLoader
+		buildTargets release "$generator" SolAROpticalFlow
+		buildTargets debug "$generator" SolAROpticalFlow
+		
+		buildTargets release "$generator" Sample-Triangulation
+		buildTargets debug "$generator" Sample-Triangulation
 
+		buildTargets release "$generator" Sample-Slam
+		buildTargets debug "$generator" Sample-Slam	
 		#buildTargets release "$generator" SolARSVDtriangulation
 		# unit tests
 		#buildTargets release "$generator" UnitTests
@@ -339,16 +375,22 @@ case "$TARGET" in
 		#buildTargets release "$generator" SolARDescriptorMatcherNonFree
 		#buildTargets release "$generator" SolARHomographyEstimationNonFree
 
-		buildTargets release "$generator" Sample-Triangulation
-		buildTargets debug "$generator" Sample-Triangulation
-
-		buildTargets release "$generator" Sample-Slam
-		buildTargets debug "$generator" Sample-Slam	
-
 		# tests "non free"
 		buildTargets debug "$generator" SolARDescriptorExtractorNonFree
 		#buildTargets debug "$generator" SolARDescriptorMatcherNonFree
 		#buildTargets debug "$generator" SolARHomographyEstimationNonFree		
+		;;
+		
+	"opengv")
+		buildTargets release "$generator" SolARModuleOpenGV
+		buildTargets debug "$generator" SolARModuleOpenGV
+		
+		#tests "opengv"
+		buildTargets release "$generator" SolARTestModuleOpenGVPnP
+		buildTargets debug "$generator" SolARTestModuleOpenGVPnP
+		
+		buildTargets release "$generator" SolARTestModuleOpenGVTriangulation
+		buildTargets debug "$generator" SolARTestModuleOpenGVTriangulation
 		;;
 	*)
 		buildTargets release "$generator" $TARGET
