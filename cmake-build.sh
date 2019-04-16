@@ -88,6 +88,10 @@ case "$TARGET" in
 		cd Samples/NaturalImageMarker/Plugin
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
+		cmake -H../../sources/Samples/NaturalImageMarker/Plugin/tests/TestNaturalImageMarkerPipeline -B./Samples/NaturalImageMarker/Plugin/tests/TestNaturalImageMarkerPipeline -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/Plugin/tests/TestNaturalImageMarkerPipeline
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../..
 		cmake -H../../sources/Samples/NaturalImageMarker/StandAlone -B./Samples/NaturalImageMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/NaturalImageMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
@@ -98,6 +102,10 @@ case "$TARGET" in
 		cd Samples/FiducialMarker/Plugin
 		cmake --build . --config $BUILDCONFIG
 		cd ../../..
+		cmake -H../../sources/Samples/FiducialMarker/Plugin/tests/TestFiducialMarkerPipeline -B./Samples/FiducialMarker/Plugin/tests/TestFiducialMarkerPipeline -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/Plugin/tests/TestFiducialMarkerPipeline
+		cmake --build . --config $BUILDCONFIG
+		cd ../../../../..
 		cmake -H../../sources/Samples/FiducialMarker/StandAlone -B./Samples/FiducialMarker/StandAlone -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd Samples/FiducialMarker/StandAlone
 		cmake --build . --config $BUILDCONFIG
@@ -317,8 +325,8 @@ case "$TARGET" in
 		buildTargets release "$generator" SolARModuleCeres		
 		buildTargets debug "$generator" SolARModuleCeres	
 
-		#buildTargets release "$generator" SolARPipelineManager	
-		#buildTargets debug "$generator" SolARPipelineManager					
+		buildTargets release "$generator" SolARPipelineManager	
+		buildTargets debug "$generator" SolARPipelineManager					
 
 		#buildTargets release "$generator" SolARUnityPlugin
 		#buildTargets debug "$generator" SolARUnityPlugin		
