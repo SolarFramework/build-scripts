@@ -11,7 +11,11 @@ VERSIONSFILE=$1		# input file : versions.txt
 WITHWARNING=0		# 1 to print warnings
 DONOTHING=0			# 1 to display current versions only
 
-# read required versions
+SOURCEDIR=`pwd`
+export PATH=$SOURCEDIR/build-scripts/:$PATH
+
+
+# read required versions and store them in associative array
 declare -A ARRAYVER
 
 while read line; do
@@ -60,6 +64,7 @@ function updateVersion()
 					if [[ ${ARRAYVER[$project]} == "" ]]; then
 						echo "enter new version:"
 						read newversion
+						ARRAYVER[$project]=$newversion
 					else
 						newversion=${ARRAYVER[$project]}		
 						echo ">>>> Changing $project version number to $newversion"
@@ -68,8 +73,10 @@ function updateVersion()
 					# change in CMakeLists.txt
 					sed -i -e "s/VERSION_NUMBER\s\"[0-9]\.[0-9]\.[0-9]\"/VERSION_NUMBER \"$newversion\"/g" CMakeLists.txt > /dev/null
 
-					# change in .pc.in
-					sed -i -e "s/Version: [0-9]\.[0-9]\.[0-9]/Version: $newversion/g" *.pc.in > /dev/null 
+					# change in .pc.in if exists
+					for pcin in ./*.pc.in; do
+						[ -e "$pcin" ] && sed -i -e "s/Version: [0-]\.[0-9]\.[0-9]/Version: $newversion/g" $pcin
+					done
 					
 					# change in .pro
 					sed -i -e "s/VERSION=[0-9]\.[0-9]\.[0-9]/VERSION=$newversion/g" *.pro > /dev/null
@@ -97,10 +104,6 @@ function updateVersion()
 		cd $processedDir
 	done
 }
-
-
-SOURCEDIR=`pwd`
-export PATH=$SOURCEDIR/build-scripts/:$PATH
 
 # SolARFramework
 cd sources/SolARFramework
