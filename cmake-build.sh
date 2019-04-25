@@ -220,6 +220,27 @@ case "$TARGET" in
 		cmake --build . --config $BUILDCONFIG
 		cd ../../../
 		;;
+	"PipelineFiducialMarker")
+		cmake -H../../sources/Samples/FiducialMarker/Plugin -B./Samples/FiducialMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/FiducialMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install
+		cd ../../../
+		;;
+	"PipelineNaturalImageMarker")
+		cmake -H../../sources/Samples/NaturalImageMarker/Plugin -B./Samples/NaturalImageMarker/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/NaturalImageMarker/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install
+		cd ../../../
+		;;
+	"PipeLineSlam")
+		cmake -H../../sources/Samples/Sample-Slam/Plugin -B./Samples/Sample-Slam/Plugin -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd Samples/Sample-Slam/Plugin
+		cmake --build . --config $BUILDCONFIG
+		cmake --build . --config $BUILDCONFIG --target install
+		cd ../../../
+		;;				
 	"UnitTests")
 		cmake -H../../sources/SolARTests/unittests/ModuleLoading -B./SolARTests/unittests/ModuleLoading -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
 		cd SolARTests/unittests/ModuleLoading
