@@ -8,14 +8,17 @@ function buildTargets()
 BUILDCONFIG=$1
 GENERATOR="$2"
 TARGET=$3
+#sous target full ou novice
+
+#voir option cmake pour solar Framework
 
 mkdir -p $BUILDCONFIG
 cd $BUILDCONFIG
 
 case "$TARGET" in
 	"SolARWrapper")
-		cmake -H../../sources/SolARFramework/SolARWrapper -B./SolARWrapper -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
-		cd SolARWrapper
+		cmake -H$BCOMDEVROOT/bcomBuild/SolARWrapper -B$BCOMDEVROOT/bcomBuild/SolARWrapper/build -G "$GENERATOR" -DCMAKE_BUILD_TYPE=$BUILDCONFIG
+		cd $BCOMDEVROOT/bcomBuild/SolARWrapper/build
 		cmake --build . --config $BUILDCONFIG
 		#cmake --build . --config $BUILDCONFIG --target install
 		cd ..
