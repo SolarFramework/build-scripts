@@ -55,8 +55,8 @@ pipeline {
                     cd $GITREPONAME
                     git checkout $commitOrTag
 
-                    if [ "$PROJECT" == "PipelineNaturalImageMarker" ] || [ "$PROJECT" == "PipelineFiducialMarker" ]; then cd Plugin; fi
-
+                    if [ "$PROJECT" == "PipelineNaturalImageMarker" ] || [ "$PROJECT" == "PipelineFiducialMarker" ] || [ "$PROJECT" == "PipelineSlam" ]; then cd Plugin; fi
+                    
                     if [ "$WINDOWSORLINUX" == "unix" ]; then
                         sed -i -e '/gflags/,$d' packagedependencies.txt
                         sed -i -e '/glog/,$d' packagedependencies.txt
@@ -112,7 +112,7 @@ pipeline {
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
                     export PROJECTPATH=`pwd`
-                    if [ "$PROJECT" == "PipelineNaturalImageMarker" ] || [ "$PROJECT" == "PipelineFiducialMarker" ]; then cd Plugin; fi
+                    if [ "$PROJECT" == "PipelineNaturalImageMarker" ] || [ "$PROJECT" == "PipelineFiducialMarker" ] || [ "$PROJECT" == "PipelineSlam" ]; then cd Plugin; fi
                     versionline=`grep "set (VERSION_NUMBER" CMakeLists.txt`
                     version=`echo $versionline | cut -d'"' -f2`
 
