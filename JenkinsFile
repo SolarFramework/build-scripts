@@ -107,7 +107,7 @@ pipeline {
                 sh '''
                     set -e
                     if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$PROJECT/; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECT/; fi    
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$PROJECT/; fi    
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
                     export PROJECTPATH=`pwd`
