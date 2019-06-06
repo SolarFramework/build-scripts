@@ -107,11 +107,12 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$PROJECT/; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$PROJECT/; fi    
+                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi    
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
                     export PROJECTPATH=`pwd`
+                    if [ "$PROJECT" == "PipelineNaturalImageMarker" ] || [ "$PROJECT" == "PipelineFiducialMarker" ]; then cd Plugin; fi
                     versionline=`grep "set (VERSION_NUMBER" CMakeLists.txt`
                     version=`echo $versionline | cut -d'"' -f2`
 
