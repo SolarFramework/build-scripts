@@ -55,6 +55,11 @@ pipeline {
                     cd $GITREPONAME
                     git checkout $commitOrTag
 
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then
+                        sed -i -e '/gflags/,$d' packagedependencies.txt
+                        sed -i -e '/glog/,$d' packagedependencies.txt
+                    fi
+
                     java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a x86_64 -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
                     java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a x86_64 -c debug -m shared -k $artifactoryApiKey -f packagedependencies.txt
                 '''
