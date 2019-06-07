@@ -16,7 +16,7 @@ pipeline {
                 GITREPONAME="${env.GITREPONAME}"
                 PROJECT="${env.PROJECT}"
                 PROJECTSUBFOLDER="${env.PROJECTSUBFOLDER}"
-                SOURCESUBFOLDER=="${env.SOURCESUBFOLDER}"
+                SOURCESUBFOLDER="${env.SOURCESUBFOLDER}"
                 WINDOWSORLINUX="${env.WINDOWSORLINUX}"
             }
             steps {
