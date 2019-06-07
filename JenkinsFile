@@ -16,6 +16,7 @@ pipeline {
                 GITREPONAME="${env.GITREPONAME}"
                 PROJECT="${env.PROJECT}"
                 PROJECTSUBFOLDER="${env.PROJECTSUBFOLDER}"
+                SOURCESUBFOLDER=="${env.SOURCESUBFOLDER}"
                 WINDOWSORLINUX="${env.WINDOWSORLINUX}"
             }
             steps {
@@ -55,7 +56,7 @@ pipeline {
                     cd $GITREPONAME
                     git checkout $commitOrTag
 
-                    if [ "$PROJECT" == "PipelineNaturalImageMarker" ] || [ "$PROJECT" == "PipelineFiducialMarker" ] || [ "$PROJECT" == "PipelineSlam" ]; then cd Plugin; fi
+                    cd $SOURCESUBFOLDER
 
                     if [ "$WINDOWSORLINUX" == "unix" ]; then
                         sed -i -e '/gflags/,$d' packagedependencies.txt
@@ -68,15 +69,6 @@ pipeline {
         }
 
         stage("build") {
-            environment {
-                USERNAMEPWD = credentials('github-solarBcom')              
-                commitOrTag="${env.commitOrTag}"
-                GITREPONAME="${env.GITREPONAME}"
-                PROJECT="${env.PROJECT}"
-                PROJECTSUBFOLDER="${env.PROJECTSUBFOLDER}"
-                WINDOWSORLINUX="${env.WINDOWSORLINUX}"
-                CMAKEGENERATOR="${env.CMAKEGENERATOR}"
-            }
             steps {
                 sh '''
                     set -e
@@ -89,13 +81,6 @@ pipeline {
         }
 
         stage("deploy") {
-            environment {
-                USERNAMEPWD = credentials('github-solarBcom')              
-                commitOrTag="${env.commitOrTag}"
-                GITREPONAME="${env.GITREPONAME}"
-                PROJECT="${env.PROJECT}"
-                PROJECTSUBFOLDER="${env.PROJECTSUBFOLDER}"
-            }
             when {
                 expression {
                     return (PROJECT != "FiducialMarker") && (PROJECT != "NaturalImageMarker") && (PROJECT != "Sample-Slam") && (PROJECT != "Sample-Triangulation")
@@ -115,7 +100,8 @@ pipeline {
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
                     export PROJECTPATH=`pwd`
-                    if [ "$PROJECT" == "PipelineNaturalImageMarker" ] || [ "$PROJECT" == "PipelineFiducialMarker" ] || [ "$PROJECT" == "PipelineSlam" ]; then cd Plugin; fi
+                    
+                    cd $SOURCESUBFOLDER
                     versionline=`grep "set (VERSION_NUMBER" CMakeLists.txt`
                     version=`echo $versionline | cut -d'"' -f2`
 
