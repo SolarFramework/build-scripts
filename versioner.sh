@@ -151,6 +151,7 @@ if [[ $DONOTHING == "0" ]]; then
 		for packagedepfile in $packagedepfiles
 		do
 			sed -i -e "s/$comp|[0-9]\.[0-9]\.[0-9]/$comp|$vers/g" $packagedepfile
+			sed -i -e "s/$comp|[0-9]\.[0-9][0-9]\.[0-9]/$comp|$vers/g" $packagedepfile
 		done				
 	done
 fi
