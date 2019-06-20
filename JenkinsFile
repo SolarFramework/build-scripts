@@ -108,7 +108,7 @@ pipeline {
                     return (PROJECT != "FiducialMarker") && (PROJECT != "NaturalImageMarker") && (PROJECT != "Sample-Slam") && (PROJECT != "Sample-Triangulation")
                 }
                 expression {
-                    timeout(time: 5, unit: 'SECONDS') {
+                    timeout(time: 15, unit: 'SECONDS') {
                         input message: 'Deploy on github?'
                         // if input is Aborted, the whole build will fail, otherwise
                         // we must return true to continue
