@@ -127,9 +127,9 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    if [ "$WINDOWSORLINUX" == "win" ]; then export ARCH="x86_64"; export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export ARCH="x86_64"; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
-		    if [ "$WINDOWSORLINUX" == "android" ]; then export ARCH="arm64-v8a"; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"; cd /home/jenkins/workspace/Builds-Android/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+                    if [ "$WINDOWSORLINUX" == "win" ]; then export ARCH="x86_64"; exort TAG="win"; export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export ARCH="x86_64"; export TAG="unix" ; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+		    if [ "$WINDOWSORLINUX" == "android" ]; then export ARCH="arm64-v8a"; export TAG="unix"; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"; cd /home/jenkins/workspace/Builds-Android/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
 
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
@@ -156,8 +156,8 @@ pipeline {
                     export GITHUB_PASSWORD=${CREDENTIALS[1]}
                     git reset --hard HEAD
                     git checkout develop
-                    hub release delete "$PROJECT/$version/$WINDOWSORLINUX" || echo "Release $PROJECT/$version/$WINDOWSORLINUX doesn't exist"
-                    hub release create -a "$PROJECT"_"$version"_"$ARCH"_shared_release.zip -a "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$WINDOWSORLINUX"
+                    hub release delete "$PROJECT/$version/$TAG" || echo "Release $PROJECT/$version/$TAG doesn't exist"
+                    hub release create -a "$PROJECT"_"$version"_"$ARCH"_shared_release.zip -a "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$TAG"
                 '''
             }
         }
