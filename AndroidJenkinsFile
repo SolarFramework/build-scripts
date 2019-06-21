@@ -32,10 +32,10 @@ pipeline {
                         mkdir -p /home/jenkins/BCOMDEVROOT
                         mkdir -p /home/jenkins/BCOMDEVROOT/linux
                     fi
-                   if [ "$WINDOWSORLINUX" == "android" ]; then
+                    if [ "$WINDOWSORLINUX" == "android" ]; then
                         export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"
                         mkdir -p /home/jenkins/BCOMDEVROOT
-                        mkdir -p /home/jenkins/BCOMDEVROOT/linux
+                        mkdir -p /home/jenkins/BCOMDEVROOT/android
                     fi
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     rm -rf tools
