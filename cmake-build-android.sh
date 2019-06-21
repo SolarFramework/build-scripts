@@ -12,7 +12,7 @@ TARGET=$3
 mkdir -p $BUILDCONFIG
 cd $BUILDCONFIG
 
-TOOLCHAIN= "-DCMAKE_TOOLCHAIN_FILE=/opt/android/android-ndk-r18b/build/cmake/android.toolchain.cmake -DANDROID_NDK_X64=TRUE -DANDROID_SDK=/opt/android/Sdk/  -DANDROID_NDK_X64=TRUE -DANDROID_ABI=arm64-v8a -DCMAKE_CXX_STANDARD=11"
+TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=/opt/android/android-ndk-r18b/build/cmake/android.toolchain.cmake -DANDROID_NDK_X64=TRUE -DANDROID_SDK=/opt/android/Sdk/  -DANDROID_NDK_X64=TRUE -DANDROID_ABI=arm64-v8a -DCMAKE_CXX_STANDARD=11"
 
 case "$TARGET" in
 	"SolARFramework")
