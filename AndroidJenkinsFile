@@ -67,7 +67,7 @@ pipeline {
                         sed -i -e '/gflags/,$d' packagedependencies.txt
                         sed -i -e '/glog/,$d' packagedependencies.txt
                     fi
-		    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; sed -i -e "s/boost|1\.68/$comp|1.69/g"; fi
+		    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; sed -i -e "s/boost|1\.68/boost|1.69/g" packagedependencies.txt; fi
 
                     java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
                     java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c debug -m shared -k $artifactoryApiKey -f packagedependencies.txt
@@ -126,7 +126,8 @@ pipeline {
                 sh '''
                     set -e
                     if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi    
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+         	    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; fi    
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
                     export PROJECTPATH=`pwd`
@@ -137,10 +138,10 @@ pipeline {
 
                     cd $BCOMDEVROOT/bcomBuild/
                     zip -r $PROJECT.zip $PROJECT/
-                    cp "$PROJECT".zip "$PROJECT"_"$version"_x86_64_shared_release.zip
-                    zip --delete "$PROJECT"_"$version"_x86_64_shared_release.zip "$PROJECT/$version/lib/x86_64/shared/debug/*"
-                    cp "$PROJECT".zip "$PROJECT"_"$version"_x86_64_shared_debug.zip
-                    zip --delete "$PROJECT"_"$version"_x86_64_shared_debug.zip "$PROJECT/$version/lib/x86_64/shared/release/*"
+                    cp "$PROJECT".zip "$PROJECT"_"$version"_$ARCH_shared_release.zip
+                    zip --delete "$PROJECT"_"$version"_$ARCH_shared_release.zip "$PROJECT/$version/lib/$ARCH/shared/debug/*"
+                    cp "$PROJECT".zip "$PROJECT"_"$version"_$ARCH_shared_debug.zip
+                    zip --delete "$PROJECT"_"$version"_$ARCH_shared_debug.zip "$PROJECT/$version/lib/$ARCH/shared/release/*"
                     rm -rf $PROJECT.zip
                     pwd
                     mv *.zip "$PROJECTPATH"
@@ -153,7 +154,7 @@ pipeline {
                     git reset --hard HEAD
                     git checkout develop
                     hub release delete "$PROJECT/$version/$WINDOWSORLINUX" || echo "Release $PROJECT/$version/$WINDOWSORLINUX doesn't exist"
-                    hub release create -a "$PROJECT"_"$version"_x86_64_shared_release.zip -a "$PROJECT"_"$version"_x86_64_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$WINDOWSORLINUX"
+                    hub release create -a "$PROJECT"_"$version"_$ARCH_shared_release.zip -a "$PROJECT"_"$version"_$ARCH_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$WINDOWSORLINUX"
                 '''
             }
         }
