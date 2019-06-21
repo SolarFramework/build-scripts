@@ -1,0 +1,162 @@
+pipeline {
+    agent {
+        label "jenkins-slave-argo-android"
+    }
+    options {
+        ansiColor('xterm')
+    }
+    stages {
+        
+        stage("get build tools, third parties and source code") {
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+                artifactoryApiKey=credentials('artifactoryApiKey')              
+                commitOrTag="${env.commitOrTag}"
+                PATH="C:\\Program Files\\Git\\usr\\bin;C:\\Program Files\\Git\\bin;${env.PATH}"
+                GITREPONAME="${env.GITREPONAME}"
+                PROJECT="${env.PROJECT}"
+                PROJECTSUBFOLDER="${env.PROJECTSUBFOLDER}"
+                SOURCESUBFOLDER="${env.SOURCESUBFOLDER}"
+                WINDOWSORLINUX="${env.WINDOWSORLINUX}"
+            }
+            steps {
+                script {
+                    currentBuild.displayName = "${env.commitOrTag}"
+                    currentBuild.description = "${env.commitOrTag}"
+                }
+                
+                sh '''
+                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; fi  
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then
+                        export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"
+                        mkdir -p /home/jenkins/BCOMDEVROOT
+                        mkdir -p /home/jenkins/BCOMDEVROOT/linux
+                    fi
+                   if [ "$WINDOWSORLINUX" == "android" ]; then
+                        export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"
+                        mkdir -p /home/jenkins/BCOMDEVROOT
+                        mkdir -p /home/jenkins/BCOMDEVROOT/linux
+                    fi
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    rm -rf tools
+                    rm -rf SolAR
+                    mkdir -p tools  
+                    mkdir -p SolAR                
+                    echo "artifactoryApiKey=$artifactoryApiKey" > ~/.pkgm-bcom
+                    cd tools
+                    export TOOLSDIR=`pwd`
+                    curl -L https://github.com/SolarFramework/binaries/releases/download/pkgm-bcom%2F1.0.0%2Fmulti/pkgm-1.0.0-fat.jar -o pkgm-1.0.0-fat.jar
+                    cd ..
+
+                    cd SolAR
+                    git clone -b develop https://$USERNAMEPWD@github.com/SolarFramework/build-scripts.git
+                    chmod +x build-scripts/*.sh
+                    rm -rf build/
+                    
+                    mkdir -p sources
+                    cd sources
+                    if [ "$PROJECTSUBFOLDER" != "" ]; then mkdir "$PROJECTSUBFOLDER"; cd "$PROJECTSUBFOLDER"; fi
+
+                    git clone https://$USERNAMEPWD@github.com/SolarFramework/$GITREPONAME.git
+                    cd $GITREPONAME
+                    git checkout $commitOrTag
+
+                    cd ./$SOURCESUBFOLDER
+
+                    if [ "$WINDOWSORLINUX" != "win" ]; then
+                        sed -i -e '/gflags/,$d' packagedependencies.txt
+                        sed -i -e '/glog/,$d' packagedependencies.txt
+                    fi
+		    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; fi
+
+                    java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
+                    java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c debug -m shared -k $artifactoryApiKey -f packagedependencies.txt
+                '''
+            }
+        }
+
+        stage("build") {
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+                artifactoryApiKey=credentials('artifactoryApiKey')              
+                commitOrTag="${env.commitOrTag}"
+                PATH="C:\\Program Files\\Git\\usr\\bin;C:\\Program Files\\Git\\bin;${env.PATH}"
+                GITREPONAME="${env.GITREPONAME}"
+                PROJECT="${env.PROJECT}"
+                PROJECTSUBFOLDER="${env.PROJECTSUBFOLDER}"
+                SOURCESUBFOLDER="${env.SOURCESUBFOLDER}"
+                WINDOWSORLINUX="${env.WINDOWSORLINUX}"
+            }        
+            steps {
+                sh '''
+                    set -e
+                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; fi
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; fi                    
+                    if [ "$WINDOWSORLINUX" == "android" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"; fi                    
+                    cd SolAR
+                    ./build-scripts/cmake-build-android.sh $PROJECT "$CMAKEGENERATOR"
+                '''
+            }
+        }
+
+        stage("deploy") {
+            environment {
+                USERNAMEPWD = credentials('github-solarBcom')
+                artifactoryApiKey=credentials('artifactoryApiKey')              
+                commitOrTag="${env.commitOrTag}"
+                PATH="C:\\Program Files\\Git\\usr\\bin;C:\\Program Files\\Git\\bin;${env.PATH}"
+                GITREPONAME="${env.GITREPONAME}"
+                PROJECT="${env.PROJECT}"
+                PROJECTSUBFOLDER="${env.PROJECTSUBFOLDER}"
+                SOURCESUBFOLDER="${env.SOURCESUBFOLDER}"
+                WINDOWSORLINUX="${env.WINDOWSORLINUX}"
+            }        
+            when {
+                expression {
+                    return (PROJECT != "FiducialMarker") && (PROJECT != "NaturalImageMarker") && (PROJECT != "Sample-Slam") && (PROJECT != "Sample-Triangulation")
+                }
+                expression {
+                    input message: 'Deploy on github?'
+                    // if input is Aborted, the whole build will fail, otherwise
+                    // we must return true to continue
+                    return true
+                }
+            }           
+            steps {
+                sh '''
+                    set -e
+                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi    
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    
+                    export PROJECTPATH=`pwd`
+                    
+                    cd ./$SOURCESUBFOLDER
+                    versionline=`grep "set (VERSION_NUMBER" CMakeLists.txt`
+                    version=`echo $versionline | cut -d'"' -f2`
+
+                    cd $BCOMDEVROOT/bcomBuild/
+                    zip -r $PROJECT.zip $PROJECT/
+                    cp "$PROJECT".zip "$PROJECT"_"$version"_x86_64_shared_release.zip
+                    zip --delete "$PROJECT"_"$version"_x86_64_shared_release.zip "$PROJECT/$version/lib/x86_64/shared/debug/*"
+                    cp "$PROJECT".zip "$PROJECT"_"$version"_x86_64_shared_debug.zip
+                    zip --delete "$PROJECT"_"$version"_x86_64_shared_debug.zip "$PROJECT/$version/lib/x86_64/shared/release/*"
+                    rm -rf $PROJECT.zip
+                    pwd
+                    mv *.zip "$PROJECTPATH"
+
+                    cd "$PROJECTPATH"
+                    IFS=':'
+                    read -ra CREDENTIALS <<< "$USERNAMEPWD"
+                    export GITHUB_USER=${CREDENTIALS[0]}
+                    export GITHUB_PASSWORD=${CREDENTIALS[1]}
+                    git reset --hard HEAD
+                    git checkout develop
+                    hub release delete "$PROJECT/$version/$WINDOWSORLINUX" || echo "Release $PROJECT/$version/$WINDOWSORLINUX doesn't exist"
+                    hub release create -a "$PROJECT"_"$version"_x86_64_shared_release.zip -a "$PROJECT"_"$version"_x86_64_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$WINDOWSORLINUX"
+                '''
+            }
+        }
+
+    }
+}
