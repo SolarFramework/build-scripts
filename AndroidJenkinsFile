@@ -90,6 +90,8 @@ pipeline {
             steps {
                 sh '''
                     set -e
+		    ls -l /opt/
+		    ls -l /opt/android/
                     if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; fi
                     if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; fi                    
                     if [ "$WINDOWSORLINUX" == "android" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"; fi                    
@@ -125,9 +127,10 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
-         	    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; fi    
+                    if [ "$WINDOWSORLINUX" == "win" ]; then export ARCH="x86_64"; export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export ARCH="x86_64"; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+		    if [ "$WINDOWSORLINUX" == "android" ]; then export ARCH="arm64-v8a"; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
                     export PROJECTPATH=`pwd`
