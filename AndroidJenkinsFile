@@ -67,7 +67,7 @@ pipeline {
                         sed -i -e '/gflags/,$d' packagedependencies.txt
                         sed -i -e '/glog/,$d' packagedependencies.txt
                     fi
-		    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; sed -i -e "s/boost|1\.68/boost|1.69/g" packagedependencies.txt; fi
+		    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; sed -i -e "s/boost|1\\.68/boost|1.69/g" packagedependencies.txt; fi
 
                     java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
                     java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c debug -m shared -k $artifactoryApiKey -f packagedependencies.txt
