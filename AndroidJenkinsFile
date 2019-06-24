@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label "jenkins-slave-argo-android"
+        label "jenkins-slave-argo"
     }
     options {
         ansiColor('xterm')
