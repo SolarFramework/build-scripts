@@ -156,8 +156,9 @@ pipeline {
                     export GITHUB_PASSWORD=${CREDENTIALS[1]}
                     git reset --hard HEAD
                     git checkout develop
-                    hub release delete "$PROJECT/$version/$TAG" || echo "Release $PROJECT/$version/$TAG doesn't exist"
-                    hub release create -a "$PROJECT"_"$version"_"$ARCH"_shared_release.zip -a "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$TAG"
+                    # hub release delete "$PROJECT/$version/$TAG" || echo "Release $PROJECT/$version/$TAG doesn't exist"
+                    hub release create -a "$PROJECT"_"$version"_"$ARCH"_shared_release.zip -a "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$TAG" || hub release edit -a "$PROJECT"_"$version"_"$ARCH"_shared_release.zip -a "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$TAG"
+			
                 '''
             }
         }
