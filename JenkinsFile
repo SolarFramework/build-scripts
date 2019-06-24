@@ -32,6 +32,11 @@ pipeline {
                         mkdir -p /home/jenkins/BCOMDEVROOT
                         mkdir -p /home/jenkins/BCOMDEVROOT/linux
                     fi
+                    if [ "$WINDOWSORLINUX" == "android" ]; then
+                        export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"
+                        mkdir -p /home/jenkins/BCOMDEVROOT
+                        mkdir -p /home/jenkins/BCOMDEVROOT/android
+                    fi
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     rm -rf tools
                     rm -rf SolAR
@@ -58,12 +63,14 @@ pipeline {
 
                     cd ./$SOURCESUBFOLDER
 
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then
+                    if [ "$WINDOWSORLINUX" != "win" ]; then
                         sed -i -e '/gflags/,$d' packagedependencies.txt
                         sed -i -e '/glog/,$d' packagedependencies.txt
                     fi
-                    java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a x86_64 -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
-                    java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a x86_64 -c debug -m shared -k $artifactoryApiKey -f packagedependencies.txt
+		    if [ "$WINDOWSORLINUX" != "android" ]; then export ARCH="x86_64"; else export ARCH="arm64-v8a"; sed -i -e "s/boost|1\\.68/boost|1.69/g" packagedependencies.txt; fi
+
+                    java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c release -m shared -k $artifactoryApiKey -f packagedependencies.txt
+                    java -jar "$TOOLSDIR/pkgm-1.0.0-fat.jar" install -a $ARCH -c debug -m shared -k $artifactoryApiKey -f packagedependencies.txt
                 '''
             }
         }
@@ -83,10 +90,25 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; fi                    
-                    cd SolAR
-                    ./build-scripts/cmake-build.sh $PROJECT "$CMAKEGENERATOR"
+		    ls -l /opt/
+		    ls -l /opt/android/
+                    if [ "$WINDOWSORLINUX" == "win" ]; then 
+			export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"
+			cd SolAR
+			./build-scripts/cmake-build.sh $PROJECT "$CMAKEGENERATOR"
+		    fi
+                    
+		    if [ "$WINDOWSORLINUX" == "unix" ]; then
+			export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"
+			cd SolAR
+			./build-scripts/cmake-build.sh $PROJECT "$CMAKEGENERATOR"
+		    fi
+
+                    if [ "$WINDOWSORLINUX" == "android" ]; then
+			export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"
+			cd SolAR
+			./build-scripts/cmake-build-android.sh $PROJECT "$CMAKEGENERATOR"
+		    fi                    
                 '''
             }
         }
@@ -108,19 +130,19 @@ pipeline {
                     return (PROJECT != "FiducialMarker") && (PROJECT != "NaturalImageMarker") && (PROJECT != "Sample-Slam") && (PROJECT != "Sample-Triangulation")
                 }
                 expression {
-                    timeout(time: 15, unit: 'SECONDS') {
-                        input message: 'Deploy on github?'
-                        // if input is Aborted, the whole build will fail, otherwise
-                        // we must return true to continue
-                        return true
-                    }
+                    input message: 'Deploy on github?'
+                    // if input is Aborted, the whole build will fail, otherwise
+                    // we must return true to continue
+                    return true
                 }
             }           
             steps {
                 sh '''
                     set -e
-                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi    
+                    if [ "$WINDOWSORLINUX" == "win" ]; then export ARCH="x86_64"; exort TAG="win"; export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; cd SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+                    if [ "$WINDOWSORLINUX" == "unix" ]; then export ARCH="x86_64"; export TAG="unix" ; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; cd /home/jenkins/workspace/Builds/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+		    if [ "$WINDOWSORLINUX" == "android" ]; then export ARCH="arm64-v8a"; export TAG="unix"; export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"; cd /home/jenkins/workspace/Builds-Android/$PROJECT/SolAR/sources/$PROJECTSUBFOLDER/$GITREPONAME/; fi
+
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     
                     export PROJECTPATH=`pwd`
@@ -131,10 +153,10 @@ pipeline {
 
                     cd $BCOMDEVROOT/bcomBuild/
                     zip -r $PROJECT.zip $PROJECT/
-                    cp "$PROJECT".zip "$PROJECT"_"$version"_x86_64_shared_release.zip
-                    zip --delete "$PROJECT"_"$version"_x86_64_shared_release.zip "$PROJECT/$version/lib/x86_64/shared/debug/*"
-                    cp "$PROJECT".zip "$PROJECT"_"$version"_x86_64_shared_debug.zip
-                    zip --delete "$PROJECT"_"$version"_x86_64_shared_debug.zip "$PROJECT/$version/lib/x86_64/shared/release/*"
+                    cp "$PROJECT".zip "$PROJECT"_"$version"_"$ARCH"_shared_release.zip
+                    zip --delete "$PROJECT"_"$version"_"$ARCH"_shared_release.zip "$PROJECT/$version/lib/$ARCH/shared/debug/*"
+                    cp "$PROJECT".zip "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip
+                    zip --delete "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip "$PROJECT/$version/lib/$ARCH/shared/release/*"
                     rm -rf $PROJECT.zip
                     pwd
                     mv *.zip "$PROJECTPATH"
@@ -146,8 +168,9 @@ pipeline {
                     export GITHUB_PASSWORD=${CREDENTIALS[1]}
                     git reset --hard HEAD
                     git checkout develop
-                    hub release delete "$PROJECT/$version/$WINDOWSORLINUX" || echo "Release $PROJECT/$version/$WINDOWSORLINUX doesn't exist"
-                    hub release create -a "$PROJECT"_"$version"_x86_64_shared_release.zip -a "$PROJECT"_"$version"_x86_64_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$WINDOWSORLINUX"
+                    # hub release delete "$PROJECT/$version/$TAG" || echo "Release $PROJECT/$version/$TAG doesn't exist"
+                    hub release create -a "$PROJECT"_"$version"_"$ARCH"_shared_release.zip -a "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$TAG" || hub release edit -a "$PROJECT"_"$version"_"$ARCH"_shared_release.zip -a "$PROJECT"_"$version"_"$ARCH"_shared_debug.zip -m "$PROJECT $version version" "$PROJECT/$version/$TAG"
+			
                 '''
             }
         }
