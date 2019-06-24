@@ -92,11 +92,23 @@ pipeline {
                     set -e
 		    ls -l /opt/
 		    ls -l /opt/android/
-                    if [ "$WINDOWSORLINUX" == "win" ]; then export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"; fi
-                    if [ "$WINDOWSORLINUX" == "unix" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"; fi                    
-                    if [ "$WINDOWSORLINUX" == "android" ]; then export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"; fi                    
-                    cd SolAR
-                    ./build-scripts/cmake-build-android.sh $PROJECT "$CMAKEGENERATOR"
+                    if [ "$WINDOWSORLINUX" == "win" ]; then 
+			export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"
+			cd SolAR
+			./build-scripts/cmake-build.sh $PROJECT "$CMAKEGENERATOR"
+		    fi
+                    
+		    if [ "$WINDOWSORLINUX" == "unix" ]; then
+			export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/linux"
+			cd SolAR
+			./build-scripts/cmake-build.sh $PROJECT "$CMAKEGENERATOR"
+		    fi
+
+                    if [ "$WINDOWSORLINUX" == "android" ]; then
+			export BCOMDEVROOT="/home/jenkins/BCOMDEVROOT/android"
+			cd SolAR
+			./build-scripts/cmake-build-android.sh $PROJECT "$CMAKEGENERATOR"
+		    fi                    
                 '''
             }
         }
