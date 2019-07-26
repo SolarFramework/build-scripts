@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+export BCOMDEVROOT=~/SolARFramework/SolARLibraries
 
 # function to build all targets
 function buildTargets() 

@@ -89,7 +89,7 @@ function updateVersion()
 					done
 
 					# change packagedependencies.txt in other repositories
-					packagedepfiles=`find $SOURCEDIR -name "packagedependencies.txt"`
+					packagedepfiles=`find $SOURCEDIR -name "packagedependencies*.txt"`
 					for packagedepfile in $packagedepfiles
 					do
 						sed -i -e "s/$project|[0-9]\.[0-9]\.[0-9]/$project|$newversion/g" $packagedepfile
@@ -147,7 +147,7 @@ if [[ $DONOTHING == "0" ]]; then
 	for comp in "${!ARRAYVER[@]}"
 	do
 		vers=${ARRAYVER[$comp]}
-		packagedepfiles=`find $SOURCEDIR -name "packagedependencies.txt"`
+		packagedepfiles=`find $SOURCEDIR -name "packagedependencies*.txt"`
 		for packagedepfile in $packagedepfiles
 		do
 			sed -i -e "s/$comp|[0-9]\.[0-9]\.[0-9]/$comp|$vers/g" $packagedepfile

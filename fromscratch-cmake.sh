@@ -6,10 +6,10 @@ echo "CLEAN BUILD FILES AND OLD SOURCES"
 rm -rf tests tools sources build
 echo
 echo "GET DEPENDENCIES"
+mkdir -p ~/SolARFramework
+mkdir -p ~/SolARFramework/SolARLibraries
+export BCOMDEVROOT=~/SolARFramework/SolARLibraries
 echo
-rm -rf $BCOMDEVROOT/builddefs
-rm -rf $BCOMDEVROOT/builddefs/qmake
-git clone https://github.com/b-com-software-basis/builddefs-qmake.git $BCOMDEVROOT/builddefs/qmake
 mkdir -p tools
 mkdir -p sources
 cd tools
