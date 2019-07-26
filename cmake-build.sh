@@ -1,7 +1,9 @@
 #!/bin/bash
 
 set -e
-export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+if [[ -z "${BCOMDEVROOT}" ]]; then
+	export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+fi
 
 # function to build all targets
 function buildTargets() 
