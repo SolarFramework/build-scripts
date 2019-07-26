@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-if [[ -z "${BCOMDEVROOT}" ]]; then
+if [ -z ${BCOMDEVROOT+x} ]; then
 	export BCOMDEVROOT=~/SolARFramework/SolARLibraries
 fi
 
