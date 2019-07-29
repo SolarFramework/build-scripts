@@ -90,8 +90,6 @@ pipeline {
             steps {
                 sh '''
                     set -e
-		    ls -l /opt/
-		    ls -l /opt/android/
                     if [ "$WINDOWSORLINUX" == "win" ]; then 
 			export BCOMDEVROOT="C:/JenkinsBCOMDEVROOT/windows"
 			cd SolAR
