@@ -2,7 +2,11 @@
 
 set -e
 if [ -z ${BCOMDEVROOT+x} ]; then
-	export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+	if [ "$OSTYPE" == "msys" ]; then
+		export BCOMDEVROOT="C:/SolARFramework/SolARLibraries"
+	else
+		export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+	fi
 fi
 
 # function to build all targets

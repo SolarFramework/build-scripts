@@ -1,9 +1,7 @@
 #!/bin/bash
 
 set -e
-set -x
-
-echo "Do you wish to install 3rd parties libraries? (opencv 3.2.0, boost 1.64.0, eigen 3.3.4, xpcf 1.0, spdlog 0.14.0?)"
+echo "Do you wish to install 3rd parties libraries?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) answer=yes; break;;
@@ -16,9 +14,16 @@ echo "CLEAN BUILD FILES AND OLD SOURCES"
 rm -rf tests tools sources build
 
 echo
-mkdir -p ~/SolARFramework
-mkdir -p ~/SolARFramework/SolARLibraries
-export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+if [ "$OSTYPE" == "msys" ]; then
+	mkdir -p "C:/SolARFramework/"
+	mkdir -p "C:/SolARFramework/SolARLibraries"
+	export BCOMDEVROOT="C:/SolARFramework/SolARLibraries"
+fi
+else
+	mkdir -p ~/SolARFramework
+	mkdir -p ~/SolARFramework/SolARLibraries
+	export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+fi
 mkdir -p tools
 mkdir -p sources
 cd tools

@@ -6,9 +6,16 @@ echo "CLEAN BUILD FILES AND OLD SOURCES"
 rm -rf tests tools sources build
 echo
 echo "GET DEPENDENCIES"
-mkdir -p ~/SolARFramework
-mkdir -p ~/SolARFramework/SolARLibraries
-export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+if [ "$OSTYPE" == "msys" ]; then
+	mkdir -p "C:/SolARFramework/"
+	mkdir -p "C:/SolARFramework/SolARLibraries"
+	export BCOMDEVROOT="C:/SolARFramework/SolARLibraries"
+fi
+else
+	mkdir -p ~/SolARFramework
+	mkdir -p ~/SolARFramework/SolARLibraries
+	export BCOMDEVROOT=~/SolARFramework/SolARLibraries
+fi
 echo
 mkdir -p tools
 mkdir -p sources
